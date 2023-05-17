@@ -50,10 +50,12 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 
 	admin.POST("/create_categories", productHandler.CreateCategory)
 	admin.GET("/all_categories", productHandler.ViewAllCategory)
+	admin.GET("find_category_id/:id", productHandler.FindCategoryById)
 
 	admin.POST("/create_product", productHandler.CreateProduct)
 	admin.GET("/all_product", productHandler.ListAllProducts)
 	admin.PATCH("/update_product", productHandler.UpdatateProduct)
+	admin.DELETE("delete_product/:id", productHandler.DeleteProduct)
 	return &ServerHTTP{engine: engine}
 
 }

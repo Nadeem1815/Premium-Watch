@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nadeem1815/premium-watch/pkg/domain"
@@ -66,6 +67,37 @@ func (cr *ProductHandler) ViewAllCategory(c *gin.Context) {
 		StatusCode: http.StatusOK,
 		Message:    " View all Categories",
 		Data:       categories,
+		Errors:     nil,
+	})
+
+}
+
+func (cr *ProductHandler) FindCategoryById(c *gin.Context) {
+	paramID := c.Param("id")
+	categoriesid, err := strconv.Atoi(paramID)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, response.Response{
+			StatusCode: http.StatusUnprocessableEntity,
+			Message:    "unable to parse category ID",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	categoryId, err := cr.productUseCase.FindCategoryById(c.Request.Context(), categoriesid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "unable to fetch category",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Category is",
+		Data:       categoryId,
 		Errors:     nil,
 	})
 
@@ -148,6 +180,37 @@ func (cr *ProductHandler) ListAllProducts(c *gin.Context) {
 		StatusCode: http.StatusOK,
 		Message:    "list All Products",
 		Data:       listAllProducts,
+		Errors:     nil,
+	})
+}
+
+func (cr *ProductHandler) DeleteProduct(c *gin.Context) {
+	paramsID := c.Param("id")
+	id, err := strconv.Atoi(paramsID)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, response.Response{
+			StatusCode: http.StatusUnprocessableEntity,
+			Message:    "failed parse product ID",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	err = cr.productUseCase.DeleteProduct(c.Request.Context(), id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "Unable to fetch product",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Product Deleted",
+		Data:       nil,
 		Errors:     nil,
 	})
 }

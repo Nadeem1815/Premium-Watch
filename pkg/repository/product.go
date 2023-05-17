@@ -38,6 +38,14 @@ func (c *productDataBase) ViewAllCategory() ([]domain.ProductCategory, error) {
 
 }
 
+func (c *productDataBase) FindCategoryById(ctx context.Context, categoriesid int) (domain.ProductCategory, error) {
+	var category domain.ProductCategory
+	fetchCategoryId := `SELECT *FROM  product_categories WHERE id=$1;`
+	err := c.DB.Raw(fetchCategoryId, categoriesid).Scan(&category).Error
+	return category, err
+
+}
+
 func (cr *productDataBase) CreateProduct(ctx context.Context, createProduct domain.Product) (domain.Product, error) {
 	var createdProducts domain.Product
 	productItemsCreatequery := `INSERT INTO products(product_category_id,name,brand,colour,description,price,stock,product_image,sku,created_at)
@@ -94,5 +102,12 @@ func (cr *productDataBase) UpdateProduct(ctx context.Context, updateProduct doma
 		updateProduct.SKU,
 		updateProduct.ID).Scan(&updateProductItem).Error
 	return updateProductItem, err
+
+}
+
+func (c *productDataBase) DeleteProduct(ctx context.Context, id int) error {
+	deleteQuery := `DELETE FROM products WHERE id=$1;`
+	err := c.DB.Exec(deleteQuery, id).Error
+	return err
 
 }
