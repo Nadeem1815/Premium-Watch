@@ -101,6 +101,37 @@ func (cr *ProductHandler) CreateProduct(c *gin.Context) {
 
 }
 
+func (cr *ProductHandler) UpdatateProduct(c *gin.Context) {
+	var updataproduct domain.Product
+	if err := c.Bind(&updataproduct); err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "failed to read request body",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	updateProductItem, err := cr.productUseCase.UpdateProduct(c.Request.Context(), updataproduct)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "Unable to Update Items",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "updated Successfully",
+		Data:       updateProductItem,
+		Errors:     nil,
+	})
+
+}
+
 func (cr *ProductHandler) ListAllProducts(c *gin.Context) {
 	listAllProducts, err := cr.productUseCase.ListAllProducts()
 	if err != nil {

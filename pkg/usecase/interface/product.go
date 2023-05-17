@@ -12,4 +12,5 @@ type ProductUseCase interface {
 	ViewAllCategory() ([]domain.ProductCategory, error)
 	CreateProduct(ctx context.Context, createProduct domain.Product) (domain.Product, error)
 	ListAllProducts() ([]model.OutPutProduct, error)
+	UpdateProduct(ctx context.Context, updataproduct domain.Product) (domain.Product, error)
 }

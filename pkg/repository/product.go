@@ -65,3 +65,34 @@ func (cr *productDataBase) ListAllProducts() ([]model.OutPutProduct, error) {
 	}
 	return allProduct, err
 }
+
+func (cr *productDataBase) UpdateProduct(ctx context.Context, updateProduct domain.Product) (domain.Product, error) {
+	var updateProductItem domain.Product
+	updateProductQuery := `UPDATE products
+						 SET             
+							 product_category_id=$1, 
+							 name=$2,            
+							 brand=$3,         
+							 colour=$4,           
+							 description=$5,      
+							 price=$6,            
+							 stock=$7,            
+							 product_image=$8,     
+							 sku=$9,    
+							 updated_at=NOW()
+						WHERE id=$10
+						RETURNING id,product_category_id,name,brand,colour,description,price,stock,product_image,sku,updated_at`
+	err := cr.DB.Raw(updateProductQuery,
+		updateProduct.ProductCategoryID,
+		updateProduct.Name,
+		updateProduct.Brand,
+		updateProduct.Colour,
+		updateProduct.Description,
+		updateProduct.Price,
+		updateProduct.Stock,
+		updateProduct.ProductImage,
+		updateProduct.SKU,
+		updateProduct.ID).Scan(&updateProductItem).Error
+	return updateProductItem, err
+
+}

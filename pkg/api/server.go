@@ -53,6 +53,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 
 	admin.POST("/create_product", productHandler.CreateProduct)
 	admin.GET("/all_product", productHandler.ListAllProducts)
+	admin.PATCH("/update_product", productHandler.UpdatateProduct)
 	return &ServerHTTP{engine: engine}
 
 }

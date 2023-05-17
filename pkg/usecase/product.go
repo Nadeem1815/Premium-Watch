@@ -38,3 +38,8 @@ func (cr *productUseCase) ListAllProducts() ([]model.OutPutProduct, error) {
 	viewAllProduct, err := cr.productRepo.ListAllProducts()
 	return viewAllProduct, err
 }
+
+func (cr *productUseCase) UpdateProduct(ctx context.Context, updataproduct domain.Product) (domain.Product, error) {
+	updateProductItem, err := cr.productRepo.UpdateProduct(ctx, updataproduct)
+	return updateProductItem, err
+}
