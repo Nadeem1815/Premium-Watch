@@ -11,5 +11,5 @@ type AdminRepository interface {
 	AdminSave(ctx context.Context, admin domain.Admin) error
 	FindAdmin(ctx context.Context, admin model.AdminLogin) (domain.Admin, error)
 	ListAllUsers() ([]domain.Users, error)
-	FindUserId(ctx context.Context,userId int)(domain.Users,error)
+	FindUserId(ctx context.Context,userId string)(domain.Users,error)
 }

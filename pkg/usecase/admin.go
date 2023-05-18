@@ -90,7 +90,7 @@ func (c *adminUseCase) ListAllUsers() ([]domain.Users, error) {
 
 }
 
-func (c *adminUseCase) FindUserId(ctx context.Context, userId int) (domain.Users, error) {
+func (c *adminUseCase) FindUserId(ctx context.Context, userId string) (domain.Users, error) {
 	findUser, err := c.adminRepo.FindUserId(ctx, userId)
 	return findUser, err
 }

@@ -56,7 +56,7 @@ func (c *adminDatabase) ListAllUsers() ([]domain.Users, error) {
 
 }
 
-func (c *adminDatabase) FindUserId(ctx context.Context, userId int) (domain.Users, error) {
+func (c *adminDatabase) FindUserId(ctx context.Context, userId string) (domain.Users, error) {
 	tx := c.DB.Begin()
 	var isExists bool
 	if err := tx.Raw("SELECT EXISTS(SELECT 1 FROM users WHERE id=$1)", userId).Scan(&isExists).Error; err != nil {
@@ -86,4 +86,3 @@ func (c *adminDatabase) FindUserId(ctx context.Context, userId int) (domain.User
 	return user, nil
 
 }
-

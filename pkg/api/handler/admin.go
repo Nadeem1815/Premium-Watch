@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	services "github.com/nadeem1815/premium-watch/pkg/usecase/interface"
@@ -120,7 +119,7 @@ func (cr *AdminHandler) ListAllUsers(c *gin.Context) {
 			Errors:     err.Error(),
 		})
 		return
-		
+
 	}
 	c.JSON(http.StatusOK, response.Response{
 		StatusCode: http.StatusOK,
@@ -131,18 +130,20 @@ func (cr *AdminHandler) ListAllUsers(c *gin.Context) {
 }
 
 func (cr *AdminHandler) FindUserId(c *gin.Context) {
-	paramsId := c.Param("user_id")
-	userId, err := strconv.Atoi(paramsId)
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, response.Response{
-			StatusCode: http.StatusUnprocessableEntity,
-			Message:    "failed parse user id",
-			Data:       nil,
-			Errors:     err.Error(),
-		})
-		return
-	}
-	user, err := cr.adminusecase.FindUserId(c.Request.Context(), userId)
+	paramsId := c.Query("user_id")
+	// fmt.Println(paramsId, "///////////")
+	// userId, err := strconv.Atoi(paramsId)
+	// fmt.Println(userId, "////////")
+	// if err != nil {
+	// 	c.JSON(http.StatusUnprocessableEntity, response.Response{
+	// 		StatusCode: http.StatusUnprocessableEntity,
+	// 		Message:    "failed parse user id",
+	// 		Data:       nil,
+	// 		Errors:     err.Error(),
+	// 	})
+	// 	return
+	// }
+	user, err := cr.adminusecase.FindUserId(c.Request.Context(), paramsId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.Response{
 			StatusCode: http.StatusInternalServerError,
