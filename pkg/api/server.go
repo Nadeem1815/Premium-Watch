@@ -15,6 +15,7 @@ type ServerHTTP struct {
 func NewServerHTTP(userHandler *handler.UserHandler,
 	adminHandler *handler.AdminHandler,
 	productHandler *handler.ProductHandler,
+	cartHandler *handler.CartHandler,
 ) *ServerHTTP {
 	engine := gin.New()
 
@@ -25,19 +26,30 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	// request jwt
 
+	// user routes
 	userapi := engine.Group("user")
 
 	userapi.POST("/register", userHandler.UserRegister)
 	userapi.POST("/login/email", userHandler.LoginWithEmail)
 
+	// products routes
+	userapi.GET("/all_product", productHandler.ListAllProducts)
+
+	// category routes
+	userapi.GET("/all_category", productHandler.ViewAllCategory)
+	userapi.GET("/category/:id", productHandler.FindCategoryById)
+
+	// User require Authentication
 	userapi.Use(middleware.UserAuth)
 	userapi.POST("/logout", userHandler.UserLogut)
 	userapi.GET("/home", userHandler.Home)
 
-	userapi.GET("/all_product", productHandler.ListAllProducts)
+	// cart routes
+	userapi.POST("/cart/:product_id", cartHandler.AddToCart)
 
+	// admins routes
 	admin := engine.Group("admin")
-	// admin.POST("/register", adminHandler.AdminSingUP)
+	admin.POST("/register", adminHandler.AdminSingUP)
 	admin.POST("/login/email", adminHandler.LoginAdmin)
 	// admin.GET()"/logout",)
 
@@ -48,14 +60,16 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	admin.GET("/list_all_user", adminHandler.ListAllUsers)
 	admin.GET("/find_userid/:user_id", adminHandler.FindUserId)
 
+	// category routes
 	admin.POST("/create_categories", productHandler.CreateCategory)
 	admin.GET("/all_categories", productHandler.ViewAllCategory)
 	admin.GET("/find_category_id/:id", productHandler.FindCategoryById)
 
+	// product routes
 	admin.POST("/create_product", productHandler.CreateProduct)
 	admin.GET("/all_product", productHandler.ListAllProducts)
 	admin.PATCH("/update_product", productHandler.UpdatateProduct)
-	admin.DELETE("delete_product/:id", productHandler.DeleteProduct)
+	admin.DELETE("/delete_product/:id", productHandler.DeleteProduct)
 	return &ServerHTTP{engine: engine}
 
 }

@@ -39,6 +39,10 @@ func (c *userDatabase) UserRegister(ctx context.Context, user model.UsarDataInpu
 		err = c.DB.Exec(insertUserInfoQuery, userData.ID).Error
 	}
 
+	// cartUseridQuery := `INSERT INTO carts(user_id)
+	// 				   VALUES($1)`
+	// err = c.DB.Exec(cartUseridQuery, userData.ID).Error
+
 	return userData, err
 }
 
@@ -51,7 +55,7 @@ func (c *userDatabase) FindByEmail(ctx context.Context, email string) (model.Use
 						FULL OUTER JOIN 
 							user_infos as info
 						ON 
-							u.id=info.id
+							u.id=info.users_id
 						WHERE 
 							u.email_id=$1;`
 	err := c.DB.Raw(findUserQuery, email).Scan(&userData).Error
@@ -59,7 +63,7 @@ func (c *userDatabase) FindByEmail(ctx context.Context, email string) (model.Use
 
 }
 
-func (c *userDatabase) BlockUser(ctx context.Context, user_id int) (domain.UserInfo, error) {
+func (c *userDatabase) BlockUser(ctx context.Context, user_id string) (domain.UserInfo, error) {
 	var userInfo domain.UserInfo
 	blockQuery := `UPDATE
 					user_infos

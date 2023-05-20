@@ -27,6 +27,10 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 		// product table
 		&domain.ProductCategory{},
 		&domain.Product{},
+
+		//cart table
+		&domain.Cart{},
+		&domain.CartItems{},
 	)
 
 	return db, dbErr

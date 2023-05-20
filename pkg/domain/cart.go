@@ -4,7 +4,6 @@ type Cart struct {
 	ID       uint    `gorm:"primaryKey,index" json:"id"`
 	UserID   string  `json:"user_id"`
 	Users    Users   `gorm:"foreignKey:UserID" json:"-"`
-	CouponID uint    `json:"coupon_id"`
 	SubTotal float64 `json:"sub_total"`
 	Discount float64 `json:"discount"`
 	Total    float64 `json:"total"`

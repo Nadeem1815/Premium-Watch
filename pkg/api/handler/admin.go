@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nadeem1815/premium-watch/pkg/domain"
 	services "github.com/nadeem1815/premium-watch/pkg/usecase/interface"
 	"github.com/nadeem1815/premium-watch/pkg/utils/model"
 	"github.com/nadeem1815/premium-watch/pkg/utils/response"
@@ -20,36 +21,36 @@ func NewAdminHandler(adminUseCase services.AdminUseCase) *AdminHandler {
 	}
 }
 
-// func (cr *AdminHandler) AdminSingUP(c *gin.Context) {
-// 	var newAdmin domain.Admin
-// 	if err := c.Bind(&newAdmin); err != nil {
-// 		c.JSON(http.StatusUnprocessableEntity, response.Response{
-// 			StatusCode: 422,
-// 			Message:    "unable to read the request body",
-// 			Data:       nil,
-// 			Errors:     err.Error(),
-// 		})
-// 		return
+func (cr *AdminHandler) AdminSingUP(c *gin.Context) {
+	var newAdmin domain.Admin
+	if err := c.Bind(&newAdmin); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, response.Response{
+			StatusCode: 422,
+			Message:    "unable to read the request body",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
 
-// 	}
-// 	// call creatadmin method from admin UseCase
-// 	err := cr.adminusecase.SaveAdmin(c.Request.Context(), newAdmin)
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, response.Response{
-// 			StatusCode: 400,
-// 			Message:    "failed to create admin",
-// 			Data:       nil,
-// 			Errors:     err.Error(),
-// 		})
-// 		return
+	}
+	// call creatadmin method from admin UseCase
+	err := cr.adminusecase.SaveAdmin(c.Request.Context(), newAdmin)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: 400,
+			Message:    "failed to create admin",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
 
-// 	}
+	}
 
-// 	c.JSON(http.StatusCreated, response.Response{
-// 		StatusCode: 200,
-// 		Message:    "admin created succefully",
-// 	})
-// }
+	c.JSON(http.StatusCreated, response.Response{
+		StatusCode: 200,
+		Message:    "admin created succefully",
+	})
+}
 
 func (cr *AdminHandler) LoginAdmin(c *gin.Context) {
 	// recieve data from request

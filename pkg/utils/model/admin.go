@@ -6,7 +6,7 @@ type AdminLogin struct {
 }
 
 type AdminDataOutput struct {
-	ID       uint   `gorm:"primaryKey,index" json:"id"`
+	ID       string `gorm:"primaryKey,index" json:"id"`
 	UserName string `gorm:"uniqueIndex" json:"user_name"`
 	Email    string `gorm:"uniqueIndex" json:"email"`
 }

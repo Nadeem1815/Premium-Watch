@@ -7,6 +7,7 @@ import (
 
 	"github.com/nadeem1815/premium-watch/pkg/domain"
 	interfaces "github.com/nadeem1815/premium-watch/pkg/repository/interface"
+	"github.com/nadeem1815/premium-watch/pkg/utils/idgenerator"
 	"github.com/nadeem1815/premium-watch/pkg/utils/model"
 	"gorm.io/gorm"
 )
@@ -21,9 +22,12 @@ func NewAdminRepository(DB *gorm.DB) interfaces.AdminRepository {
 
 func (c *adminDatabase) AdminSave(ctx context.Context, admin domain.Admin) error {
 
-	insertquery := `INSERT INTO admins (user_name,email,password)VALUES($1,$2,$3)
+	admins := domain.Admin{
+		ID: idgenerator.GenerateID(),
+	}
+	insertquery := `INSERT INTO admins (id,user_name,email,password)VALUES($1,$2,$3,$4)
 			RETURNING id,user_name,email `
-	err := c.DB.Raw(insertquery, admin.UserName, admin.Email, admin.Password).Scan(&admin).Error
+	err := c.DB.Raw(insertquery, admins.ID, admin.UserName, admin.Email, admin.Password).Scan(&admin).Error
 	return err
 }
 

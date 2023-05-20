@@ -137,18 +137,18 @@ func (cr *UserHandler) BlockedUser(c *gin.Context) {
 	// 	return
 	// }
 	paramsId := c.Param("user_id")
-	user_id, err := strconv.Atoi(paramsId)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, response.Response{
-			StatusCode: http.StatusBadRequest,
-			Message:    "failed to find user id",
-			Data:       nil,
-			Errors:     err.Error(),
-		})
-		return
-	}
+	// user_id, err := strconv.Atoi(paramsId)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, response.Response{
+	// 		StatusCode: http.StatusBadRequest,
+	// 		Message:    "failed to find user id",
+	// 		Data:       nil,
+	// 		Errors:     err.Error(),
+	// 	})
+	// 	return
+	// }
 
-	blockUser, err := cr.userUseCase.BlockUser(c.Request.Context(), user_id)
+	blockUser, err := cr.userUseCase.BlockUser(c.Request.Context(), paramsId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.Response{
 			StatusCode: http.StatusInternalServerError,
