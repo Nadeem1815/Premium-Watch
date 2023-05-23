@@ -11,5 +11,5 @@ type UserRepository interface {
 	UserRegister(ctx context.Context, user model.UsarDataInput) (model.UserDataOutput, error)
 	FindByEmail(ctx context.Context, email string) (model.UserLoginVarifier, error)
 	BlockUser(ctx context.Context, user_id string) (domain.UserInfo, error)
-	UnBlockUser(ctx context.Context, user_id int) (domain.UserInfo, error)
+	UnBlockUser(ctx context.Context, user_id string) (domain.UserInfo, error)
 }

@@ -77,7 +77,7 @@ func (c *userDatabase) BlockUser(ctx context.Context, user_id string) (domain.Us
 	return userInfo, err
 
 }
-func (c *userDatabase) UnBlockUser(ctx context.Context, user_id int) (domain.UserInfo, error) {
+func (c *userDatabase) UnBlockUser(ctx context.Context, user_id string) (domain.UserInfo, error) {
 	var userInfo domain.UserInfo
 	unBlockQuery := `UPDATE
 					user_infos

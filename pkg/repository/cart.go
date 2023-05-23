@@ -6,6 +6,7 @@ import (
 
 	"github.com/nadeem1815/premium-watch/pkg/domain"
 	interfaces "github.com/nadeem1815/premium-watch/pkg/repository/interface"
+	"github.com/nadeem1815/premium-watch/pkg/utils/model"
 	"gorm.io/gorm"
 )
 
@@ -18,11 +19,11 @@ func NewCartRepository(DB *gorm.DB) interfaces.CartRepository {
 }
 
 func (cr *CartDataBase) AddToCart(ctx context.Context, userID string, productID int) (domain.CartItems, error) {
-	// Begi transaction
+	// Begin transaction
 	tx := cr.DB.Begin()
 	// finding cart id corresponding the user
 	var cartID int
-	fmt.Println(userID)
+
 	findCartId := `SELECT id FROM carts WHERE user_id=? LIMIT 1 `
 	err := tx.Raw(findCartId, userID).Scan(&cartID).Error
 
@@ -45,6 +46,7 @@ func (cr *CartDataBase) AddToCart(ctx context.Context, userID string, productID 
 	// checking if product is already present in the cart
 	var cartItem domain.CartItems
 	err = tx.Raw("SELECT id,quantity FROM cart_items WHERE cart_id=$1 AND product_id=$2 LIMIT 1", cartID, productID).Scan(&cartItem).Error
+	fmt.Println(cartID)
 
 	if err != nil {
 		tx.Rollback()
@@ -77,21 +79,22 @@ func (cr *CartDataBase) AddToCart(ctx context.Context, userID string, productID 
 		tx.Rollback()
 		return domain.CartItems{}, err
 	}
-	type totalsprice struct {
-		currentSubTotal float64
-		total           float64
-	}
-	var totals totalsprice
+
+	var total, sub_total float64
 	// fetch current subtotal from  cart table
-	err = tx.Raw("SELECT sub_total, total FROM carts WHERE id=$1", productID).Scan(&totals).Error
-	// err=tx.Raw("SELECT total FROM carts WHERE id=$1",productID).Scan(&total).Error
+
+	err = tx.Raw("SELECT sub_total  FROM carts WHERE id=$1", cartID).Scan(&sub_total).Error
+
+	err = tx.Raw("SELECT total FROM carts WHERE id=$1", cartID).Scan(&total).Error
+
 	if err != nil {
 		tx.Rollback()
 		return domain.CartItems{}, err
 	}
+
 	// add price of new product item of the current subtotal and product it in the cart tableconst
-	newSubTotal := totals.currentSubTotal + itemPrice
-	newTotal := totals.total + itemPrice
+	newSubTotal := sub_total + itemPrice
+	newTotal := total + itemPrice
 	err = tx.Exec("UPDATE carts SET sub_total=$1,total=$2 WHERE user_id=$3", newSubTotal, newTotal, userID).Error
 	if err != nil {
 		tx.Rollback()
@@ -104,4 +107,104 @@ func (cr *CartDataBase) AddToCart(ctx context.Context, userID string, productID 
 	}
 	return cartItem, nil
 
+}
+
+func (cr *CartDataBase) RemoveTOCart(ctx context.Context, userID string, productId int) error {
+	tx := cr.DB.Begin()
+	// find cart_id from cart table
+	var cartID int
+	err := tx.Raw("SELECT id FROM carts WHERE user_id=$1", userID).Scan(&cartID).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// find quantity
+	var quantity int
+	err = tx.Raw("SELECT quantity FROM cart_items WHERE cart_id=$1 AND product_id=$2", cartID, productId).Scan(&quantity).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+
+	}
+
+	// if quantity is 1 delete the row
+	if quantity == 0 {
+		tx.Rollback()
+		return fmt.Errorf("nothing to remove")
+	} else if quantity == 1 {
+		err := tx.Exec("DELETE  FORM cart_items WHERE cart_id=&1 AND product_id=&2", cartID, productId).Error
+		if err != nil {
+			tx.Rollback()
+			return err
+
+		}
+	} else {
+		err := tx.Exec("UPDATE cart_items SET quantity=cart_items.quantity-$1 WHERE cart_id=$2 AND product_id=$3", 1, cartID, productId).Error
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+	// fetch price from product table
+	var itemPrice float64
+
+	err = tx.Raw("SELECT price FROM products WHERE id=$1", productId).Scan(&itemPrice).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	var newSubTotal float64
+	err = tx.Raw("UPDATE carts SET sub_total=sub_total -$1,total =total-$2 WHERE id=$3 RETURNING sub_total;", itemPrice, itemPrice, cartID).Scan(&newSubTotal).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+
+	}
+	if err := tx.Commit().Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	return nil
+
+}
+
+func (cr *CartDataBase) ViewCart(ctx context.Context, userID string) (model.ViewCart, error) {
+	tx := cr.DB.Begin()
+
+	//  find cart_id from cart tables
+	var cartDetails struct {
+		ID       int
+		SubTotal float64
+		Total    float64
+	}
+	err := tx.Raw("SELECT id,sub_total,total FROM carts WHERE user_id=$1", userID).Scan(&cartDetails).Error
+	if err != nil {
+		tx.Rollback()
+		return model.ViewCart{}, err
+	}
+
+	var items []model.DisplayCart
+
+	selectItems := ` select p.name, p.price, p.brand, p.colour,p.product_image,p.sku,c.quantity,c.item_total as total from products p JOIN cart_items c on c.product_id=p.id where c.cart_id=$1`
+	err = tx.Raw(selectItems, cartDetails.ID).Scan(&items).Error
+	if err != nil {
+		tx.Rollback()
+		return model.ViewCart{}, err
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		tx.Rollback()
+		return model.ViewCart{}, err
+	}
+
+	var finalCart model.ViewCart
+
+	finalCart.SubTotal = cartDetails.SubTotal
+	finalCart.Total = cartDetails.Total
+
+	finalCart.CartItmes = items
+
+	return finalCart, nil
 }

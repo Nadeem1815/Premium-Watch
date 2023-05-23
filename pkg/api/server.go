@@ -46,7 +46,8 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 
 	// cart routes
 	userapi.POST("/cart/:product_id", cartHandler.AddToCart)
-
+	userapi.DELETE("/remove/:product_id", cartHandler.RemoveTOCart)
+	userapi.GET("/carts", cartHandler.ViewCart)
 	// admins routes
 	admin := engine.Group("admin")
 	admin.POST("/register", adminHandler.AdminSingUP)

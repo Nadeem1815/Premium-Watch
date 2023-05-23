@@ -85,7 +85,7 @@ func (c *userUseCase) BlockUser(ctx context.Context, user_id string) (domain.Use
 	return blockedUser, err
 
 }
-func (c *userUseCase) UnBlockUser(ctx context.Context, user_id int) (domain.UserInfo, error) {
+func (c *userUseCase) UnBlockUser(ctx context.Context, user_id string) (domain.UserInfo, error) {
 	unBlockedUser, err := c.userRepo.UnBlockUser(ctx, user_id)
 	return unBlockedUser, err
 }

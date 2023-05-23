@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	services "github.com/nadeem1815/premium-watch/pkg/usecase/interface"
@@ -170,18 +169,18 @@ func (cr *UserHandler) BlockedUser(c *gin.Context) {
 
 func (cr *UserHandler) UnBlockUser(c *gin.Context) {
 	paramsId := c.Param("user_id")
-	User_Id, err := strconv.Atoi(paramsId)
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, response.Response{
-			StatusCode: http.StatusUnprocessableEntity,
-			Message:    "failed to parse user id",
-			Data:       nil,
-			Errors:     err.Error(),
-		})
-		return
+	// User_Id, err := strconv.Atoi(paramsId)
+	// if err != nil {
+	// 	c.JSON(http.StatusUnprocessableEntity, response.Response{
+	// 		StatusCode: http.StatusUnprocessableEntity,
+	// 		Message:    "failed to parse user id",
+	// 		Data:       nil,
+	// 		Errors:     err.Error(),
+	// 	})
+	// 	return
 
-	}
-	UnBlockUser, err := cr.userUseCase.UnBlockUser(c.Request.Context(), User_Id)
+	// }
+	UnBlockUser, err := cr.userUseCase.UnBlockUser(c.Request.Context(), paramsId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.Response{
 			StatusCode: http.StatusInternalServerError,
