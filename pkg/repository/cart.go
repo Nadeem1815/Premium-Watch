@@ -184,7 +184,7 @@ func (cr *CartDataBase) ViewCart(ctx context.Context, userID string) (model.View
 		tx.Rollback()
 		return model.ViewCart{}, err
 	}
-
+	fmt.Printf("%+v", cartDetails)
 	var items []model.DisplayCart
 
 	selectItems := ` select p.name, p.price, p.brand, p.colour,p.product_image,p.sku,c.quantity,c.item_total as total from products p JOIN cart_items c on c.product_id=p.id where c.cart_id=$1`

@@ -35,3 +35,12 @@ type BlockUser struct {
 	UsarId int    `json:"user_id"`
 	Reason string `json:"reason"`
 }
+
+type AddressInput struct {
+	HouseName string `json:"house_name"`
+	Street    string `json:"street"`
+	District  string `json:"district"`
+	State     string `json:"state"`
+	Landmark  string `json:"landmark"`
+	PinCode   uint   `json:"pincode"`
+}

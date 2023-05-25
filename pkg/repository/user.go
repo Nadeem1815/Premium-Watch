@@ -90,3 +90,33 @@ func (c *userDatabase) UnBlockUser(ctx context.Context, user_id string) (domain.
 	return userInfo, err
 
 }
+
+func (c *userDatabase) AddAddress(ctx context.Context, body model.AddressInput, userID string) (domain.Address, error) {
+	var existingAddress, addAddress domain.Address
+
+	findAddressQuery := `SELECT *FROM addresses WHERE users_id=$1`
+	err := c.DB.Raw(findAddressQuery, userID).Scan(&existingAddress).Error
+	if err != nil {
+		return domain.Address{}, err
+
+	}
+	if existingAddress.ID == 0 || existingAddress.UsersID == "" {
+		// no address is found in user table, insert query
+		insertQuery := `INSERT INTO addresses(users_id,house_name,street,district,state,landmark,pin_code)
+	 			   	VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING*;`
+		err := c.DB.Raw(insertQuery, userID, body.HouseName, body.Street, body.District, body.State, body.Landmark, body.PinCode).Scan(&addAddress).Error
+		return addAddress, err
+	} else {
+		// address already there,update it
+		UpdateQuery := `UPDATE addresses SET house_name=$1,street=$2,district=$3,state=$4,landmark=$5,pin_code=$6 WHERE users_id=$7 RETURNING *;`
+		err := c.DB.Raw(UpdateQuery, body.HouseName, body.Street, body.District, body.State, body.Landmark, body.PinCode, userID).Scan(&addAddress).Error
+		return addAddress, err
+	}
+}
+
+func (cr *userDatabase) ViewAddress(ctx context.Context, userID string) (domain.Address, error) {
+	var address domain.Address
+	viewAddressQuery := `SELECT *FROM addresses WHERE users_id=$1`
+	err := cr.DB.Raw(viewAddressQuery, userID).Scan(&address).Error
+	return address, err
+}

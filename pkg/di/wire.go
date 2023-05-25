@@ -24,18 +24,21 @@ func InitializerAPI(cfg config.Config) (*http.ServerHTTP, error) {
 		handler.NewUserHandler,
 		handler.NewProductHandler,
 		handler.NewCartHandler,
+		handler.NewOrderHandler,
 
 		// usecase
 		usecase.NewAdminUseCase,
 		usecase.NewUserUseCase,
 		usecase.NewProductUseCase,
 		usecase.NewCartUseCase,
+		usecase.NewOrderUseCase,
 
 		// repository
 		repository.NewAdminRepository,
 		repository.NewUserRepository,
 		repository.NewProductRepository,
 		repository.NewCartRepository,
+		repository.NewOrderRepository,
 
 		http.NewServerHTTP)
 

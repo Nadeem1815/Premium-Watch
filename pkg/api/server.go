@@ -16,6 +16,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	adminHandler *handler.AdminHandler,
 	productHandler *handler.ProductHandler,
 	cartHandler *handler.CartHandler,
+	orderHandler *handler.OrderHandler,
 ) *ServerHTTP {
 	engine := gin.New()
 
@@ -44,10 +45,17 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	userapi.POST("/logout", userHandler.UserLogut)
 	userapi.GET("/home", userHandler.Home)
 
+	// Address routes
+	userapi.POST("/address", userHandler.AddAddress)
+
 	// cart routes
 	userapi.POST("/cart/:product_id", cartHandler.AddToCart)
 	userapi.DELETE("/remove/:product_id", cartHandler.RemoveTOCart)
 	userapi.GET("/carts", cartHandler.ViewCart)
+
+	// order routes
+	userapi.POST("/buy_all", orderHandler.BuyAll)
+
 	// admins routes
 	admin := engine.Group("admin")
 	admin.POST("/register", adminHandler.AdminSingUP)

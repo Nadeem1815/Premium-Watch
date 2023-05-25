@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -196,4 +197,38 @@ func (cr *UserHandler) UnBlockUser(c *gin.Context) {
 		Data:       UnBlockUser,
 		Errors:     nil,
 	})
+}
+
+func (cr *UserHandler) AddAddress(c *gin.Context) {
+	var body model.AddressInput
+
+	if err := c.Bind(&body); err != nil {
+
+		c.JSON(http.StatusUnprocessableEntity, response.Response{
+			StatusCode: http.StatusUnprocessableEntity,
+			Message:    "Unable read request body",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	userID := fmt.Sprintf("%v", c.Value("userID"))
+	address, err := cr.userUseCase.AddAddress(c.Request.Context(), body, userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "Failed to add address",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Address created successfuly",
+		Data:       address,
+		Errors:     nil,
+	})
+
 }

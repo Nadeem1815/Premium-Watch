@@ -68,6 +68,7 @@ func (cr *productDataBase) ListAllProducts() ([]model.OutPutProduct, error) {
 	var allProduct []model.OutPutProduct
 	viewAllProductQuery := `SELECT p.*, c.category_name FROM products p LEFT JOIN product_categories c ON p.product_category_id = c.id;`
 	err := cr.DB.Raw(viewAllProductQuery).Scan(&allProduct).Error
+
 	if err != nil {
 		return []model.OutPutProduct{}, err
 	}

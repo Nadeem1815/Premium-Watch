@@ -12,6 +12,18 @@ type Users struct {
 	CreatedAt time.Time
 }
 
+type Address struct {
+	ID        uint   `json:"id" gorm:"primaryKey;uinque;not null"`
+	UsersID   string `json:"user_id"`
+	Users     Users  `gorm:"foreignKey:UsersID"`
+	HouseName string `json:"house_name" binding:"required"`
+	Street    string `json:"street" binding:"required"`
+	District  string `json:"district" binding:"required"`
+	State     string `json:"state" binding:"required"`
+	Landmark  string `json:"landmark" binding:"required"`
+	PinCode   uint   `json:"pincode" binding:"requird"`
+}
+
 type UserInfo struct {
 	ID        uint   `gorm:"primaryKey"`
 	UsersID   string `json:"users_id"`

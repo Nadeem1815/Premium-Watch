@@ -33,7 +33,6 @@ func (c *userUseCase) UserRegister(ctx context.Context, input model.UsarDataInpu
 	input.Password = string(hash)
 	// passing for userdata in repo
 	user, err := c.userRepo.UserRegister(ctx, input)
-	
 
 	return user, err
 }
@@ -88,4 +87,9 @@ func (c *userUseCase) BlockUser(ctx context.Context, user_id string) (domain.Use
 func (c *userUseCase) UnBlockUser(ctx context.Context, user_id string) (domain.UserInfo, error) {
 	unBlockedUser, err := c.userRepo.UnBlockUser(ctx, user_id)
 	return unBlockedUser, err
+}
+
+func (c *userUseCase) AddAddress(ctx context.Context, body model.AddressInput, userID string) (domain.Address, error) {
+	address, err := c.userRepo.AddAddress(ctx, body, userID)
+	return address, err
 }
