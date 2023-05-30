@@ -55,6 +55,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 
 	// order routes
 	userapi.POST("/buy_all", orderHandler.BuyAll)
+	userapi.PUT("/cancelorder/:oderid", orderHandler.UserCancelOrder)
 
 	// admins routes
 	admin := engine.Group("admin")

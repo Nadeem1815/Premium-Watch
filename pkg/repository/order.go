@@ -47,8 +47,8 @@ func (cr *OrderDatabase) BuyAll(ctx context.Context, body model.PlaceOrder, user
 
 	var createdOrder domain.Order
 	// order createing
-	orderquery := `INSERT INTO orders(user_id,order_date,shipping_address_id,order_total)
-				 VALUES($1,NOW(),$2,$3) RETURNING *;`
+	orderquery := `INSERT INTO orders(user_id,order_date,shipping_address_id,order_total,order_status_id)
+				 VALUES($1,NOW(),$2,$3,1) RETURNING *;`
 	err = tx.Raw(orderquery, userID, body.ShippingAddressID, cartDetails.Total).Scan(&createdOrder).Error
 	if err != nil {
 		tx.Rollback()
@@ -103,4 +103,61 @@ func (cr *OrderDatabase) BuyAll(ctx context.Context, body model.PlaceOrder, user
 	}
 	tx.Commit()
 	return createdOrder, nil
+}
+
+func (cr *OrderDatabase) CancelOrder(ctx context.Context, orderID int, UserID string) (domain.Order, error) {
+	tx := cr.DB.Begin()
+	// find order details. if order is pending user can cancel if order is not pending user cant cancel
+
+	var orderStatusId int
+	viewStatusQuery := `SELECT order_status_id FROM orders WHERE user_id=$1 AND id=$2`
+	err := tx.Raw(viewStatusQuery, UserID, orderID).Scan(&orderStatusId).Error
+	if err != nil {
+		tx.Rollback()
+		return domain.Order{}, err
+	}
+	if orderStatusId == 0 {
+		tx.Rollback()
+		return domain.Order{}, fmt.Errorf("no such order found")
+	}
+
+	// if order is pending
+	if orderStatusId == 1 {
+		var cancelledOrder domain.Order
+		cancelQuery := `UPDATE orders SET order_status_id=2 WHERE user_id=$1 AND id=$2 RETURNING *;`
+		err := tx.Raw(cancelQuery, UserID, orderID).Scan(&cancelledOrder).Error
+		if err != nil {
+			tx.Rollback()
+			return domain.Order{}, err
+		}
+
+		// increase the product Item table
+		var orderItem []domain.OrderItem
+		findOrderItemsQuery := `SELECT *FROM order_items WHERE order_id=$1`
+		err = tx.Raw(findOrderItemsQuery, orderID).Scan(&orderItem).Error
+		if err != nil {
+			tx.Rollback()
+			return domain.Order{}, err
+		}
+		qntyUpdateQuery := `UPDATE products SET stock=stock+$1 WHERE id=$2`
+		for i := range orderItem {
+			err := tx.Exec(qntyUpdateQuery, orderItem[i].Quantity, orderItem[i].ProductID).Error
+			if err != nil {
+				tx.Rollback()
+				return domain.Order{}, err
+			}
+		}
+		tx.Commit()
+		return cancelledOrder, nil
+	}
+
+	// if order already cancelled
+	if orderStatusId == 2 {
+		tx.Rollback()
+		return domain.Order{}, fmt.Errorf("order already cancelled")
+
+	}
+	tx.Rollback()
+	return domain.Order{}, fmt.Errorf("order processed ,cannot cancelled")
+
 }

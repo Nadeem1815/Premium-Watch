@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	services "github.com/nadeem1815/premium-watch/pkg/usecase/interface"
@@ -48,6 +49,41 @@ func (cr *OrderHandler) BuyAll(c *gin.Context) {
 		StatusCode: http.StatusOK,
 		Message:    "Order Successfully",
 		Data:       order,
+		Errors:     nil,
+	})
+
+}
+
+func (cr *OrderHandler) UserCancelOrder(c *gin.Context) {
+	paramsId := c.Param("oderid")
+	orderID, err := strconv.Atoi(paramsId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Unable to parse orderID",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+
+	fmt.Println("-----", orderID)
+
+	UserID := fmt.Sprintf("%v", c.Value("userID"))
+	cancelOrder, err := cr.orderUseCase.CancelOrder(c.Request.Context(), orderID, UserID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "failed order cancel",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "order cancel successfuly",
+		Data:       cancelOrder,
 		Errors:     nil,
 	})
 

@@ -36,3 +36,8 @@ func (cr *OrderUseCase) BuyAll(ctx context.Context, body model.PlaceOrder, UserI
 	orders, err := cr.orderRepo.BuyAll(ctx, body, UserID)
 	return orders, err
 }
+
+func (cr *OrderUseCase) CancelOrder(ctx context.Context, orderID int, UserID string) (domain.Order, error) {
+	cancelOrder, err := cr.orderRepo.CancelOrder(ctx, orderID, UserID)
+	return cancelOrder, err
+}

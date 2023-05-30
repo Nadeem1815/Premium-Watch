@@ -3,13 +3,15 @@ package domain
 import "time"
 
 type Order struct {
-	ID                uint      `gorm:"primaryKey;not null"`
-	UserID            string    `json:"user_id"`
-	Users             Users     `gorm:"foreignKey:UserID" json:"-"`
-	OrderDate         time.Time `json:"order_date"`
-	ShippingAddressID uint      `json:"shipping_address_id"`
-	Address           Address   `gorm:"foreignKey:ShippingAddressID" json:"-"`
-	OrderTotal        float64   `json:"order_total"`
+	ID                uint        `gorm:"primaryKey;not null"`
+	UserID            string      `json:"user_id"`
+	Users             Users       `gorm:"foreignKey:UserID" json:"-"`
+	OrderDate         time.Time   `json:"order_date"`
+	ShippingAddressID uint        `json:"shipping_address_id"`
+	Address           Address     `gorm:"foreignKey:ShippingAddressID" json:"-"`
+	OrderTotal        float64     `json:"order_total"`
+	OrderStatusID     uint        `json:"order_status_id"`
+	OrderStatus       OrderStatus `gorm:"foreignKey:OrderStatus" json:"-"`
 }
 
 type OrderItem struct {
