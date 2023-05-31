@@ -3,15 +3,18 @@ package domain
 import "time"
 
 type Order struct {
-	ID                uint        `gorm:"primaryKey;not null"`
-	UserID            string      `json:"user_id"`
-	Users             Users       `gorm:"foreignKey:UserID" json:"-"`
-	OrderDate         time.Time   `json:"order_date"`
-	ShippingAddressID uint        `json:"shipping_address_id"`
-	Address           Address     `gorm:"foreignKey:ShippingAddressID" json:"-"`
-	OrderTotal        float64     `json:"order_total"`
-	OrderStatusID     uint        `json:"order_status_id"`
-	OrderStatus       OrderStatus `gorm:"foreignKey:OrderStatus" json:"-"`
+	ID                uint           `gorm:"primaryKey;not null"`
+	UserID            string         `json:"user_id"`
+	Users             Users          `gorm:"foreignKey:UserID" json:"-"`
+	OrderDate         time.Time      `json:"order_date"`
+	ShippingAddressID uint           `json:"shipping_address_id"`
+	Address           Address        `gorm:"foreignKey:ShippingAddressID" json:"-"`
+	OrderTotal        float64        `json:"order_total"`
+	OrderStatusID     uint           `json:"order_status_id"`
+	OrderStatus       OrderStatus    `gorm:"foreignKey:OrderStatus" json:"-"`
+	DeliveryStatusID  uint           `json:"delivery_status_id"`
+	DeliveryStatus    DeliveryStatus `gorm:"foreignKey:DeliveryStatusID"`
+	DeliveryUpdatedAt time.Time      `json:"delivery_time"`
 }
 
 type OrderItem struct {
@@ -25,6 +28,11 @@ type OrderItem struct {
 }
 
 type OrderStatus struct {
-	ID          uint `gorm:"primaryKey"`
-	OrderStatus string
+	ID           uint   `gorm:"primaryKey"`
+	Order_Status string `json:"order_status"`
+}
+
+type DeliveryStatus struct {
+	ID     uint   `json:"id" gorm:"primaryKey"`
+	Status string `json:"status"`
 }

@@ -41,3 +41,8 @@ func (cr *OrderUseCase) CancelOrder(ctx context.Context, orderID int, UserID str
 	cancelOrder, err := cr.orderRepo.CancelOrder(ctx, orderID, UserID)
 	return cancelOrder, err
 }
+
+func (cr *OrderUseCase) UpdateOrder(ctx context.Context, orderInfo model.UpdateOrder) (domain.Order, error) {
+	updatedOrder, err := cr.orderRepo.UpdateOrder(ctx, orderInfo)
+	return updatedOrder, err
+}

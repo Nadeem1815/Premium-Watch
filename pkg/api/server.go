@@ -80,6 +80,9 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	admin.GET("/all_product", productHandler.ListAllProducts)
 	admin.PATCH("/update_product", productHandler.UpdatateProduct)
 	admin.DELETE("/delete_product/:id", productHandler.DeleteProduct)
+
+	// UpdateOrder admin
+	admin.PUT("/updateorder", orderHandler.UpdateOrder)
 	return &ServerHTTP{engine: engine}
 
 }

@@ -88,3 +88,34 @@ func (cr *OrderHandler) UserCancelOrder(c *gin.Context) {
 	})
 
 }
+
+func (cr *OrderHandler) UpdateOrder(c *gin.Context) {
+
+	var body model.UpdateOrder
+	if err := c.Bind(&body); err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "cant bind read request body",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	order, err := cr.orderUseCase.UpdateOrder(c.Request.Context(), body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "Update failed",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "updated Successfuly",
+		Data:       order,
+		Errors:     nil,
+	})
+
+}

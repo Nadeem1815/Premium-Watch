@@ -161,3 +161,19 @@ func (cr *OrderDatabase) CancelOrder(ctx context.Context, orderID int, UserID st
 	return domain.Order{}, fmt.Errorf("order processed ,cannot cancelled")
 
 }
+
+func (cr *OrderDatabase) UpdateOrder(ctx context.Context, orderInfo model.UpdateOrder) (domain.Order, error) {
+	var updatedOrder domain.Order
+
+	updateQuery := `UPDATE orders SET order_status_id=$1,delivery_status_id=$2,delivery_updated_at=NOW() WHERE id=$3 RETURNING*;`
+	err := cr.DB.Raw(updateQuery, orderInfo.OrderStatusID, orderInfo.DeliveryStatusId, orderInfo.OrderID).Scan(&updatedOrder).Error
+	if err != nil {
+		return domain.Order{}, err
+
+	}
+	if updatedOrder.ID == 0 {
+		return domain.Order{}, fmt.Errorf("no order")
+
+	}
+	return updatedOrder, nil
+}
