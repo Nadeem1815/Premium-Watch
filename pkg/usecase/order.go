@@ -46,3 +46,8 @@ func (cr *OrderUseCase) UpdateOrder(ctx context.Context, orderInfo model.UpdateO
 	updatedOrder, err := cr.orderRepo.UpdateOrder(ctx, orderInfo)
 	return updatedOrder, err
 }
+
+func (cr *OrderUseCase) ViewAllOrder(ctx context.Context, UserID string) ([]domain.Order, error) {
+	viewOrder, err := cr.orderRepo.ViewAllOrder(ctx, UserID)
+	return viewOrder, err
+}

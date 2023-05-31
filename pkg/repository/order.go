@@ -177,3 +177,15 @@ func (cr *OrderDatabase) UpdateOrder(ctx context.Context, orderInfo model.Update
 	}
 	return updatedOrder, nil
 }
+
+func (cr *OrderDatabase) ViewAllOrder(ctx context.Context, UserID string) ([]domain.Order, error) {
+	var viewOrder []domain.Order
+
+	viewOrderQuery := `SELECT *FROM orders WHERE user_id=$1`
+	err := cr.DB.Raw(viewOrderQuery, UserID).Scan(&viewOrder).Error
+	if err != nil {
+		return []domain.Order{}, err
+
+	}
+	return viewOrder, nil
+}

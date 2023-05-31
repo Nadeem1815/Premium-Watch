@@ -119,3 +119,23 @@ func (cr *OrderHandler) UpdateOrder(c *gin.Context) {
 	})
 
 }
+
+func (cr *OrderHandler) ViewAllOrder(c *gin.Context) {
+	UserID := fmt.Sprintf("%v", c.Value("userID"))
+	viewOrder, err := cr.orderUseCase.ViewAllOrder(c.Request.Context(), UserID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "faild fetch to order",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Your Order is",
+		Data:       viewOrder,
+		Errors:     nil,
+	})
+}
