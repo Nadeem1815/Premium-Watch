@@ -47,9 +47,17 @@ func (cr *OrderDatabase) BuyAll(ctx context.Context, body model.PlaceOrder, user
 
 	var createdOrder domain.Order
 	// order createing
-	orderquery := `INSERT INTO orders(user_id,order_date,shipping_address_id,order_total,order_status_id)
-				 VALUES($1,NOW(),$2,$3,1) RETURNING *;`
-	err = tx.Raw(orderquery, userID, body.ShippingAddressID, cartDetails.Total).Scan(&createdOrder).Error
+	orderquery := `INSERT INTO orders(user_id,order_date,payment_method_id,shipping_address_id,order_total,order_status_id)
+				 VALUES($1,NOW(),$2,$3,$4,1) RETURNING *;`
+	err = tx.Raw(orderquery, userID, body.PaymentMethodID, body.ShippingAddressID, cartDetails.Total).Scan(&createdOrder).Error
+	if err != nil {
+		tx.Rollback()
+		return domain.Order{}, err
+
+	}
+	// update cart table
+	updateCartTable := `UPDATE carts SET sub_total=0,total=0 WHERE user_id=$1`
+	err = tx.Exec(updateCartTable, userID).Error
 	if err != nil {
 		tx.Rollback()
 		return domain.Order{}, err
@@ -65,6 +73,16 @@ func (cr *OrderDatabase) BuyAll(ctx context.Context, body model.PlaceOrder, user
 		return domain.Order{}, err
 
 	}
+	// create an entry in the payment details table
+	createPayment := `INSERT INTO payment_details (order_id,order_total,payment_method_id,payment_status_id,updated_at)
+							VALUES($1,$2,$3,$4,NOW())`
+	err = tx.Exec(createPayment, createdOrder.ID, createdOrder.OrderTotal, body.PaymentMethodID, 1).Error
+	if err != nil {
+		tx.Rollback()
+		return domain.Order{}, err
+
+	}
+
 	createOrderItemQuery := `INSERT INTO order_items(product_id,order_id,quantity,price)VALUES($1,$2,$3,$4)`
 
 	for i := range cartItems {
@@ -89,7 +107,7 @@ func (cr *OrderDatabase) BuyAll(ctx context.Context, body model.PlaceOrder, user
 		err = tx.Exec(createOrderItemQuery, cartItems[i].ProductID, createdOrder.ID, cartItems[i].Quantity, productTotal).Error
 		if err != nil {
 			tx.Rollback()
-			return domain.Order{}, err
+			return domain.Order{}, fmt.Errorf("product is outof stock for id:%v ", cartItems[i].ProductID)
 
 		}
 
@@ -188,4 +206,19 @@ func (cr *OrderDatabase) ViewAllOrder(ctx context.Context, UserID string) ([]dom
 
 	}
 	return viewOrder, nil
+}
+
+func (cr *OrderDatabase) ViewOrderID(ctx context.Context, userID string, orderID int) (domain.Order, error) {
+	var viewOrderId domain.Order
+	vieworderdQuery := "SELECT *FROM orders WHERE user_id=$1 AND id=$2"
+	err := cr.DB.Raw(vieworderdQuery, userID, orderID).Scan(&viewOrderId).Error
+	if err != nil {
+		return domain.Order{}, err
+
+	}
+	if viewOrderId.ID == 0 {
+		return domain.Order{}, fmt.Errorf("no oders")
+
+	}
+	return viewOrderId, nil
 }

@@ -139,3 +139,34 @@ func (cr *OrderHandler) ViewAllOrder(c *gin.Context) {
 		Errors:     nil,
 	})
 }
+
+func (cr *OrderHandler) ViewOrderID(c *gin.Context) {
+	paramsID := c.Param("order_id")
+	orderID, err := strconv.Atoi(paramsID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "unable to parse orderId",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	userID := fmt.Sprintf("%v", c.Value("userID"))
+	order, err := cr.orderUseCase.ViewOrderID(c.Request.Context(), userID, orderID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "Unable to fetch ordersByid",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "your order is",
+		Data:       order,
+		Errors:     nil,
+	})
+}

@@ -1,7 +1,7 @@
 package model
 
 type DisplayCart struct {
-	ProductID    uint
+	ID           int
 	Brand        string
 	Name         string
 	Colour       string

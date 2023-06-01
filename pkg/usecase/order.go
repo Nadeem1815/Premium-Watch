@@ -51,3 +51,8 @@ func (cr *OrderUseCase) ViewAllOrder(ctx context.Context, UserID string) ([]doma
 	viewOrder, err := cr.orderRepo.ViewAllOrder(ctx, UserID)
 	return viewOrder, err
 }
+
+func (cr *OrderUseCase) ViewOrderID(ctx context.Context, userID string, orderID int) (domain.Order, error) {
+	viewOrderID, err := cr.orderRepo.ViewOrderID(ctx, userID, orderID)
+	return viewOrderID, err
+}

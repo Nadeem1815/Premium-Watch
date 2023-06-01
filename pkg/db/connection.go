@@ -15,7 +15,10 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 	db, dbErr := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{
 		SkipDefaultTransaction: true,
 	})
-	db.AutoMigrate(
+	if dbErr != nil {
+		return db, dbErr
+	}
+	dbErr = db.AutoMigrate(
 
 		// user tables
 		&domain.Users{},
@@ -40,6 +43,11 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 		&domain.OrderItem{},
 		&domain.OrderStatus{},
 		&domain.DeliveryStatus{},
+
+		// payment table
+		&domain.PaymentDetails{},
+		&domain.PaymentStatus{},
+		&domain.PaymentMethod{},
 	)
 
 	return db, dbErr

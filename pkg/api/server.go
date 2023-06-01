@@ -17,6 +17,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	productHandler *handler.ProductHandler,
 	cartHandler *handler.CartHandler,
 	orderHandler *handler.OrderHandler,
+	paymentHandler *handler.PaymentHandler,
 ) *ServerHTTP {
 	engine := gin.New()
 
@@ -27,6 +28,8 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	// request jwt
 
+	//
+	//
 	// user routes
 	userapi := engine.Group("user")
 
@@ -57,6 +60,11 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	userapi.POST("/buy_all", orderHandler.BuyAll)
 	userapi.PUT("/cancelorder/:oderid", orderHandler.UserCancelOrder)
 	userapi.GET("/view", orderHandler.ViewAllOrder)
+	userapi.GET("/viewid/:order_id", orderHandler.ViewOrderID)
+
+	// payment routes
+	userapi.GET("/razorpay/:order_id", paymentHandler.CreateRazorPayment)
+	userapi.GET("/success", paymentHandler.PaymentSuccess)
 
 	//
 	// admins routes

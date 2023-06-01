@@ -187,13 +187,13 @@ func (cr *CartDataBase) ViewCart(ctx context.Context, userID string) (model.View
 	fmt.Printf("%+v", cartDetails)
 	var items []model.DisplayCart
 
-	selectItems := ` select p.name, p.price, p.brand, p.colour,p.product_image,p.sku,c.quantity,c.item_total as total from products p JOIN cart_items c on c.product_id=p.id where c.cart_id=$1`
+	selectItems := ` select p.id,p.name, p.price, p.brand, p.colour,p.product_image,p.sku,c.quantity,c.item_total as total from products p JOIN cart_items c on c.product_id=p.id where c.cart_id=$1`
 	err = tx.Raw(selectItems, cartDetails.ID).Scan(&items).Error
 	if err != nil {
 		tx.Rollback()
 		return model.ViewCart{}, err
 	}
-
+	fmt.Println(items)
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
 		return model.ViewCart{}, err
