@@ -13,7 +13,7 @@ type Order struct {
 	Address           Address        `gorm:"foreignKey:ShippingAddressID" json:"-"`
 	OrderTotal        float64        `json:"order_total"`
 	OrderStatusID     uint           `json:"order_status_id"`
-	OrderStatus       OrderStatus    `gorm:"foreignKey:OrderStatus" json:"-"`
+	OrderStatus       OrderStatus    `gorm:"foreignKey:OrderStatusID" json:"-"`
 	DeliveryStatusID  uint           `json:"delivery_status_id"`
 	DeliveryStatus    DeliveryStatus `gorm:"foreignKey:DeliveryStatusID"`
 	DeliveryUpdatedAt time.Time      `json:"delivery_time"`
@@ -30,8 +30,8 @@ type OrderItem struct {
 }
 
 type OrderStatus struct {
-	ID          uint   `gorm:"primaryKey"`
-	OrderStatus string `json:"order_status"`
+	ID           uint   `gorm:"primaryKey"`
+	Order_Status string `json:"order_status"`
 }
 
 type DeliveryStatus struct {

@@ -36,6 +36,7 @@ func (cr *PaymentHandler) CreateRazorPayment(c *gin.Context) {
 
 	}
 	userID := fmt.Sprintf("%v", c.Value("userID"))
+	fmt.Println(userID)
 	order, razorPayID, err := cr.paymentUseCase.CreateRazorPayment(c.Request.Context(), userID, orderID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.Response{

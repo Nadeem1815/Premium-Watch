@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	razorpayID     = "rzp_test_kbr5PARM3lK7xo"
-	razorpaysecret = "1IQwgIGXyd5nVdyHI5D2cP7o"
+	razorpayID     = "rzp_test_QcnoRYGzr5tMf1"
+	razorpaysecret = "3mUO4zncgNWL5CWgDRBYoR8A"
 )
 
 type paymentUseCase struct {
@@ -35,6 +35,7 @@ func (cr *paymentUseCase) CreateRazorPayment(ctx context.Context, userID string,
 		return domain.Order{}, "", err
 
 	}
+	fmt.Println("-------", paymentDetails)
 	if paymentDetails.PaymentStatusID == 2 {
 		return domain.Order{}, "", fmt.Errorf("payment already completed")
 	}
@@ -44,6 +45,7 @@ func (cr *paymentUseCase) CreateRazorPayment(ctx context.Context, userID string,
 		return domain.Order{}, "", err
 
 	}
+	fmt.Println("us-order----", order)
 	if order.ID == 0 {
 		return domain.Order{}, "", fmt.Errorf("no orders")
 
@@ -57,6 +59,7 @@ func (cr *paymentUseCase) CreateRazorPayment(ctx context.Context, userID string,
 	}
 	body, err := client.Order.Create(data, nil)
 	if err != nil {
+		fmt.Println("errr---", err.Error())
 		return domain.Order{}, "", err
 
 	}
