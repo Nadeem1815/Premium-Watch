@@ -66,6 +66,15 @@ func (cr *PaymentHandler) PaymentSuccess(c *gin.Context) {
 	idstr := c.Query("order_id")
 	idstr = strings.ReplaceAll(idstr, "", "")
 	orderID, err := strconv.Atoi(idstr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "can't find orderID",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
 	uID := c.Query("user_id")
 	t := c.Query("total")
 	total, err := strconv.ParseFloat(t, 32)
