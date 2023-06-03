@@ -13,7 +13,7 @@ import (
 
 const (
 	razorpayID     = "rzp_test_kbr5PARM3lK7xo"
-	razorpaysecret = "l0bzJw57T8IBHEXBv5re0DIm"
+	razorpaysecret = "1IQwgIGXyd5nVdyHI5D2cP7o"
 )
 
 type paymentUseCase struct {

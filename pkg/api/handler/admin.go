@@ -21,6 +21,7 @@ func NewAdminHandler(adminUseCase services.AdminUseCase) *AdminHandler {
 	}
 }
 
+
 func (cr *AdminHandler) AdminSingUP(c *gin.Context) {
 	var newAdmin domain.Admin
 	if err := c.Bind(&newAdmin); err != nil {
@@ -89,6 +90,8 @@ func (cr *AdminHandler) LoginAdmin(c *gin.Context) {
 	})
 
 }
+
+
 
 func (cr *AdminHandler) AdminLogout(c *gin.Context) {
 	c.Writer.Header().Set("cache-control", "no-cache,no-store,must-revalidate")
