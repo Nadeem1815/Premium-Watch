@@ -94,3 +94,8 @@ func (c *adminUseCase) FindUserId(ctx context.Context, userId string) (domain.Us
 	findUser, err := c.adminRepo.FindUserId(ctx, userId)
 	return findUser, err
 }
+
+func (c *adminUseCase) DashBoard(ctx context.Context) (model.AdminDashBoard, error) {
+	adminDashBoard, err := c.adminRepo.DashBoard(ctx)
+	return adminDashBoard, err
+}

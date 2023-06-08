@@ -64,7 +64,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 
 	// payment routes
 	userapi.GET("/razorpay/:order_id", paymentHandler.CreateRazorPayment)
-	userapi.GET("/success", paymentHandler.PaymentSuccess)
+	userapi.GET("/payments/success", paymentHandler.PaymentSuccess)
 
 	//
 	// admins routes
@@ -75,6 +75,9 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 
 	admin.Use(middleware.AdminAuth)
 	admin.POST("/logout", adminHandler.AdminLogout)
+	admin.GET("/dashboard", adminHandler.DashBoard)
+
+	// user management
 	admin.PATCH("/block_user/:user_id", userHandler.BlockedUser)
 	admin.PATCH("/unblock_user/:user_id", userHandler.UnBlockUser)
 	admin.GET("/list_all_user", adminHandler.ListAllUsers)

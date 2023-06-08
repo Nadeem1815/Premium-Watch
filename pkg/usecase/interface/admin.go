@@ -12,4 +12,5 @@ type AdminUseCase interface {
 	AdminLogin(ctx context.Context, input model.AdminLogin) (string, model.AdminDataOutput, error)
 	ListAllUsers() ([]domain.Users, error)
 	FindUserId(ctx context.Context, userId string) (domain.Users, error)
+	DashBoard(ctx context.Context) (model.AdminDashBoard, error)
 }

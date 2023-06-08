@@ -65,9 +65,12 @@ func (cr *PaymentHandler) CreateRazorPayment(c *gin.Context) {
 func (cr *PaymentHandler) PaymentSuccess(c *gin.Context) {
 	paymentRef := c.Query("payment_ref")
 	idstr := c.Query("order_id")
-	idstr = strings.ReplaceAll(idstr, "", "")
+
+	idstr = strings.ReplaceAll(idstr, " ", "")
 	orderID, err := strconv.Atoi(idstr)
+	fmt.Print("orrddddddd", orderID)
 	if err != nil {
+		fmt.Println(1)
 		c.JSON(http.StatusBadRequest, response.Response{
 			StatusCode: http.StatusBadRequest,
 			Message:    "can't find orderID",
@@ -80,6 +83,7 @@ func (cr *PaymentHandler) PaymentSuccess(c *gin.Context) {
 	t := c.Query("total")
 	total, err := strconv.ParseFloat(t, 32)
 	if err != nil {
+		fmt.Println(2)
 		c.JSON(http.StatusBadRequest, response.Response{
 			StatusCode: http.StatusBadRequest,
 			Message:    "failed to fetch total from request",
