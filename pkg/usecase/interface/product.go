@@ -16,4 +16,6 @@ type ProductUseCase interface {
 	ListAllProducts() ([]model.OutPutProduct, error)
 	UpdateProduct(ctx context.Context, updataproduct domain.Product) (domain.Product, error)
 	DeleteProduct(ctx context.Context, id int) error
+
+	CreateCoupon(ctx context.Context, createdCoupon model.CreateCoupon) (domain.Coupon, error)
 }

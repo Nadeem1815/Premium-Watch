@@ -214,3 +214,36 @@ func (cr *ProductHandler) DeleteProduct(c *gin.Context) {
 		Errors:     nil,
 	})
 }
+
+
+func (cr *ProductHandler)CreateCoupon(c *gin.Context){
+	var couponCreate model.CreateCoupon
+
+	if err:=c.Bind(&couponCreate);err!=nil {
+		c.JSON(http.StatusBadRequest,response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message: "failed to create request body",
+			Data: nil,
+			Errors: err.Error(),
+		})
+		return
+		
+	}
+	couponcrt,err:=cr.productUseCase.CreateCoupon(c.Request.Context(),couponCreate)
+	if err!=nil {
+		c.JSON(http.StatusInternalServerError,response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message: "Coupon Creating failed",
+			Data: nil,
+			Errors: err.Error(),
+		})
+		return
+		
+	}
+	c.JSON(http.StatusOK,response.Response{
+		StatusCode: http.StatusOK,
+		Message: "Coupon Created",
+		Data: couponcrt,
+		Errors: nil,
+	})
+}

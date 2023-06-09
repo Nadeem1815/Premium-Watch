@@ -68,7 +68,7 @@ func (cr *PaymentHandler) PaymentSuccess(c *gin.Context) {
 
 	idstr = strings.ReplaceAll(idstr, " ", "")
 	orderID, err := strconv.Atoi(idstr)
-	fmt.Print("orrddddddd", orderID)
+	// fmt.Print("orrddddddd", orderID)
 	if err != nil {
 		fmt.Println(1)
 		c.JSON(http.StatusBadRequest, response.Response{

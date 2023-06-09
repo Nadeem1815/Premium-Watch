@@ -96,6 +96,10 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 
 	// UpdateOrder admin
 	admin.PUT("/updateorder", orderHandler.UpdateOrder)
+
+	// coupon routes
+	admin.POST("/creatcoupon", productHandler.CreateCoupon)
+
 	return &ServerHTTP{engine: engine}
 
 }

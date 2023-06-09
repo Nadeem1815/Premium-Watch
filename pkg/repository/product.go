@@ -112,3 +112,17 @@ func (c *productDataBase) DeleteProduct(ctx context.Context, id int) error {
 	return err
 
 }
+
+func (c *productDataBase) CreateCoupon(ctx context.Context, createdCoupon model.CreateCoupon) (domain.Coupon, error) {
+	var creatingcoupon domain.Coupon
+
+	createCouponQuery := `INSERT INTO coupons(code,min_order_value,discount_percent,discount_max_amount,valid_till)
+							   VALUES($1,$2,$3,$4,$5)`
+	err := c.DB.Raw(createCouponQuery, createdCoupon.Code, createdCoupon.MinOrderValue, createdCoupon.DiscountPercent, createdCoupon.DiscountMaxAmount, createdCoupon.ValidTill).Scan(creatingcoupon).Error
+	if err != nil {
+		return domain.Coupon{}, err
+
+	}
+	return creatingcoupon, nil
+
+}
