@@ -310,3 +310,24 @@ func (cr *ProductHandler) DeleteCoupon(c *gin.Context) {
 	})
 
 }
+
+func (cr *ProductHandler) ViewAllCoupon(c *gin.Context) {
+	ViewAllCoupon, err := cr.productUseCase.ViewAllCoupon()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "failed to fetch ViewAllCoupon",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "All coupons",
+		Data:       ViewAllCoupon,
+		Errors:     nil,
+	})
+
+}

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nadeem1815/premium-watch/pkg/domain"
 	interfaces "github.com/nadeem1815/premium-watch/pkg/repository/interface"
@@ -149,4 +150,21 @@ func (cr *productDataBase) DeleteCoupon(ctx context.Context, couponID int) error
 	DeleteQuery := `DELETE FROM coupons WHERE id=$1`
 	err := cr.DB.Exec(DeleteQuery, couponID).Error
 	return err
+}
+
+func (cr *productDataBase) ViewAllCoupon() ([]domain.Coupon, error) {
+	var allCoupons []domain.Coupon
+
+	allCouponsQuery := `SELECT *FROM coupons WHERE valid_till> NOW();`
+	err := cr.DB.Raw(allCouponsQuery).Scan(&allCoupons).Error
+	if err != nil {
+		return []domain.Coupon{}, err
+
+	}
+	if len(allCoupons) == 0 {
+		return allCoupons, fmt.Errorf("no coupons")
+
+	}
+	return allCoupons, nil
+
 }

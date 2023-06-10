@@ -79,3 +79,12 @@ func (cr *productUseCase) DeleteCoupon(ctx context.Context, couponID int) error 
 	err := cr.productRepo.DeleteCoupon(ctx, couponID)
 	return err
 }
+
+func(cr *productUseCase)ViewAllCoupon() ([]domain.Coupon, error){
+	viewAllCoupons,err:=cr.productRepo.ViewAllCoupon()
+	if err!=nil {
+		return []domain.Coupon{},err
+		
+	}
+	return viewAllCoupons,nil
+}
