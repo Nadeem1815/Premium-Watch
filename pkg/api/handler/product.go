@@ -215,35 +215,65 @@ func (cr *ProductHandler) DeleteProduct(c *gin.Context) {
 	})
 }
 
-
-func (cr *ProductHandler)CreateCoupon(c *gin.Context){
+func (cr *ProductHandler) CreateCoupon(c *gin.Context) {
 	var couponCreate model.CreateCoupon
 
-	if err:=c.Bind(&couponCreate);err!=nil {
-		c.JSON(http.StatusBadRequest,response.Response{
+	if err := c.Bind(&couponCreate); err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
 			StatusCode: http.StatusBadRequest,
-			Message: "failed to create request body",
-			Data: nil,
-			Errors: err.Error(),
+			Message:    "failed to create request body",
+			Data:       nil,
+			Errors:     err.Error(),
 		})
 		return
-		
+
 	}
-	couponcrt,err:=cr.productUseCase.CreateCoupon(c.Request.Context(),couponCreate)
-	if err!=nil {
-		c.JSON(http.StatusInternalServerError,response.Response{
+	couponcrt, err := cr.productUseCase.CreateCoupon(c.Request.Context(), couponCreate)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
 			StatusCode: http.StatusInternalServerError,
-			Message: "Coupon Creating failed",
-			Data: nil,
-			Errors: err.Error(),
+			Message:    "Coupon Creating failed",
+			Data:       nil,
+			Errors:     err.Error(),
 		})
 		return
-		
+
 	}
-	c.JSON(http.StatusOK,response.Response{
+	c.JSON(http.StatusOK, response.Response{
 		StatusCode: http.StatusOK,
-		Message: "Coupon Created",
-		Data: couponcrt,
-		Errors: nil,
+		Message:    "Coupon Created",
+		Data:       couponcrt,
+		Errors:     nil,
+	})
+}
+
+func (cr *ProductHandler) UpdateCoupon(c *gin.Context) {
+	var updateCoupon model.UpdatCoupon
+	if err := c.Bind(&updateCoupon); err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "failed to create request body",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	updatedCoupon, err := cr.productUseCase.UpdateCoupon(c.Request.Context(), updateCoupon)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "coupon update failed",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Updated Successfuly",
+		Data:       updatedCoupon,
+		Errors:     nil,
 	})
 }

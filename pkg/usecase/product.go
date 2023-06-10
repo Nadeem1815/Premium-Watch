@@ -54,12 +54,24 @@ func (cr *productUseCase) DeleteProduct(ctx context.Context, id int) error {
 	return err
 }
 
+func (cr *productUseCase) CreateCoupon(ctx context.Context, createdCoupon model.CreateCoupon) (domain.Coupon, error) {
+	coupon, err := cr.productRepo.CreateCoupon(ctx, createdCoupon)
+	if err != nil {
 
-func(cr *productUseCase)CreateCoupon(ctx context.Context, createdCoupon model.CreateCoupon) (domain.Coupon, error){
-	coupon,err:=cr.productRepo.CreateCoupon(ctx,createdCoupon)
-	if err!=nil {
-
-		return domain.Coupon{},err
+		return domain.Coupon{}, err
 	}
-	return coupon,nil
+	return coupon, nil
+}
+
+func (cr *productUseCase) UpdateCoupon(ctx context.Context, couponInfo model.UpdatCoupon) (domain.Coupon, error) {
+	updatedCoupon, err := cr.productRepo.UpdateCoupon(ctx, couponInfo)
+	if err != nil {
+		return domain.Coupon{}, err
+
+	}
+	// if updatedCoupon.ID == 0 {
+
+	// 	return domain.Coupon{}, fmt.Errorf("failed coupo updating")
+	// }
+	return updatedCoupon, nil
 }

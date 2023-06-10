@@ -18,4 +18,5 @@ type ProductUseCase interface {
 	DeleteProduct(ctx context.Context, id int) error
 
 	CreateCoupon(ctx context.Context, createdCoupon model.CreateCoupon) (domain.Coupon, error)
+	UpdateCoupon(ctx context.Context, UpdatedCoupon model.UpdatCoupon) (domain.Coupon, error)
 }

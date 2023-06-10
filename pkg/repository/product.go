@@ -126,3 +126,21 @@ func (c *productDataBase) CreateCoupon(ctx context.Context, createdCoupon model.
 	return creatingcoupon, nil
 
 }
+
+func (cr *productDataBase) UpdateCoupon(ctx context.Context, couponInfo model.UpdatCoupon) (domain.Coupon, error) {
+	var updateCoupn domain.Coupon
+
+	updateCouponQuery := `UPDATE coupons
+						SET min_order_value=$1, 
+						discount_percent=$2,
+						discount_max_amount=$3,
+						valid_till=$4
+						WHERE id=$5
+						RETURNING id,min_order_value,discount_percent,discount_max_amount,valid_till;`
+	err := cr.DB.Raw(updateCouponQuery, couponInfo.MinOrderValue, couponInfo.DiscountPercent, couponInfo.DiscountMaxAmount, couponInfo.ValidTill, couponInfo.ID).Scan(&updateCoupn).Error
+	if err != nil {
+		return domain.Coupon{}, err
+
+	}
+	return updateCoupn, nil
+}

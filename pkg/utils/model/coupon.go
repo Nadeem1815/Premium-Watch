@@ -10,9 +10,9 @@ type CreateCoupon struct {
 	ValidTill         time.Time `json:"valid_till"`
 }
 
-type UpdateCoupon struct {
+type UpdatCoupon struct {
 	ID                int       `josn:"id"`
-	Code              string    `gorm:"uinque" json:"code,omitempty"`
+	MinOrderValue     float64   `json:"min_order_value"`
 	DiscountPercent   float64   `json:"discount_percent"`
 	DiscountMaxAmount float64   `json:"discount_max_amount"`
 	ValidTill         time.Time `json:"valid_till"`
