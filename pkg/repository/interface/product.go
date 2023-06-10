@@ -17,7 +17,7 @@ type ProductRepository interface {
 	UpdateProduct(ctx context.Context, updateProduct domain.Product) (domain.Product, error)
 	DeleteProduct(ctx context.Context, id int) error
 
-	CreateCoupon(ctx context.Context, createdCoupon model.CreateCoupon) (domain.Coupon, error)
+	CreateCoupon(ctx context.Context, createdCoupon model.CreatCoupon) (domain.Coupon, error)
 	UpdateCoupon(ctx context.Context, couponInfo model.UpdatCoupon) (domain.Coupon, error)
 	DeleteCoupon(ctx context.Context, couponID int) error
 }

@@ -54,7 +54,7 @@ func (cr *productUseCase) DeleteProduct(ctx context.Context, id int) error {
 	return err
 }
 
-func (cr *productUseCase) CreateCoupon(ctx context.Context, createdCoupon model.CreateCoupon) (domain.Coupon, error) {
+func (cr *productUseCase) CreateCoupon(ctx context.Context, createdCoupon model.CreatCoupon) (domain.Coupon, error) {
 	coupon, err := cr.productRepo.CreateCoupon(ctx, createdCoupon)
 	if err != nil {
 

@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type CreateCoupon struct {
+type CreatCoupon struct {
 	Code              string    `json:"code,omitempty"`
 	MinOrderValue     float64   `json:"min_order_value"`
 	DiscountPercent   float64   `json:"discount_percent"`

@@ -216,7 +216,7 @@ func (cr *ProductHandler) DeleteProduct(c *gin.Context) {
 }
 
 func (cr *ProductHandler) CreateCoupon(c *gin.Context) {
-	var couponCreate model.CreateCoupon
+	var couponCreate model.CreatCoupon
 
 	if err := c.Bind(&couponCreate); err != nil {
 		c.JSON(http.StatusBadRequest, response.Response{
@@ -228,7 +228,7 @@ func (cr *ProductHandler) CreateCoupon(c *gin.Context) {
 		return
 
 	}
-	couponcrt, err := cr.productUseCase.CreateCoupon(c.Request.Context(), couponCreate)
+	couponCrt, err := cr.productUseCase.CreateCoupon(c.Request.Context(), couponCreate)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -242,14 +242,14 @@ func (cr *ProductHandler) CreateCoupon(c *gin.Context) {
 	c.JSON(http.StatusOK, response.Response{
 		StatusCode: http.StatusOK,
 		Message:    "Coupon Created",
-		Data:       couponcrt,
+		Data:       couponCrt,
 		Errors:     nil,
 	})
 }
 
 func (cr *ProductHandler) UpdateCoupon(c *gin.Context) {
 	var updateCoupon model.UpdatCoupon
-	if err := c.Bind(&updateCoupon); err != nil {
+	if err := c.BindJSON(&updateCoupon); err != nil {
 		c.JSON(http.StatusBadRequest, response.Response{
 			StatusCode: http.StatusInternalServerError,
 			Message:    "failed to create request body",
@@ -308,6 +308,5 @@ func (cr *ProductHandler) DeleteCoupon(c *gin.Context) {
 		Data:       nil,
 		Errors:     nil,
 	})
-	
 
 }
