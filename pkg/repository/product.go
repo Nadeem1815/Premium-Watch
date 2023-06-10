@@ -144,3 +144,9 @@ func (cr *productDataBase) UpdateCoupon(ctx context.Context, couponInfo model.Up
 	}
 	return updateCoupn, nil
 }
+
+func (cr *productDataBase) DeleteCoupon(ctx context.Context, couponID int) error {
+	DeleteQuery := `DELETE FROM coupons WHERE id=$1`
+	err := cr.DB.Exec(DeleteQuery, couponID).Error
+	return err
+}

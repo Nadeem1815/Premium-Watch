@@ -84,6 +84,11 @@ func (cr *CartDataBase) AddToCart(ctx context.Context, userID string, productID 
 	// fetch current subtotal from  cart table
 
 	err = tx.Raw("SELECT sub_total  FROM carts WHERE id=$1", cartID).Scan(&sub_total).Error
+	if err != nil {
+		tx.Rollback()
+		return domain.CartItems{}, err
+
+	}
 
 	err = tx.Raw("SELECT total FROM carts WHERE id=$1", cartID).Scan(&total).Error
 

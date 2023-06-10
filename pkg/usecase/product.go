@@ -75,3 +75,7 @@ func (cr *productUseCase) UpdateCoupon(ctx context.Context, couponInfo model.Upd
 	// }
 	return updatedCoupon, nil
 }
+func (cr *productUseCase) DeleteCoupon(ctx context.Context, couponID int) error {
+	err := cr.productRepo.DeleteCoupon(ctx, couponID)
+	return err
+}

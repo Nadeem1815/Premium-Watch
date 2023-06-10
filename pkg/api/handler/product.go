@@ -277,3 +277,37 @@ func (cr *ProductHandler) UpdateCoupon(c *gin.Context) {
 		Errors:     nil,
 	})
 }
+
+func (cr *ProductHandler) DeleteCoupon(c *gin.Context) {
+	parms := c.Param("id")
+	couponID, err := strconv.Atoi(parms)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Unable to process request",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	err = cr.productUseCase.DeleteCoupon(c.Request.Context(), couponID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "failed coupon delete",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "coupon deleted Succeffuly",
+		Data:       nil,
+		Errors:     nil,
+	})
+	
+
+}

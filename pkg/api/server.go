@@ -100,6 +100,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	// coupon routes
 	admin.POST("/creatcoupon", productHandler.CreateCoupon)
 	admin.PATCH("/updatecoupon", productHandler.UpdateCoupon)
+	admin.DELETE("/delete/:id", productHandler.DeleteCoupon)
 
 	return &ServerHTTP{engine: engine}
 

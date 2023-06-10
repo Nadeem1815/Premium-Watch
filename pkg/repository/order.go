@@ -38,6 +38,11 @@ func (cr *OrderDatabase) BuyAll(ctx context.Context, body model.PlaceOrder, user
 	var cartItems []domain.CartItems
 	fetchCartItems := `SELECT *FROM cart_items WHERE cart_id=$1;`
 	err = tx.Raw(fetchCartItems, cartDetails.ID).Scan(&cartItems).Error
+	if err != nil {
+		tx.Rollback()
+		return domain.Order{}, err
+
+	}
 
 	if len(cartItems) == 0 {
 		tx.Rollback()
