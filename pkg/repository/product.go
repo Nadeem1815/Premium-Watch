@@ -168,3 +168,27 @@ func (cr *productDataBase) ViewAllCoupon() ([]domain.Coupon, error) {
 	return allCoupons, nil
 
 }
+func (cr *productDataBase) ViewCouponById(ctx context.Context, couponID int) (domain.Coupon, error) {
+	var couponId domain.Coupon
+	couponIdfetchQuery := `SELECT *FROM coupons WHERE id=$1`
+	err := cr.DB.Raw(couponIdfetchQuery, couponID).Scan(&couponId).Error
+	if err != nil {
+		return domain.Coupon{}, fmt.Errorf("no coupon found this id")
+
+	}
+	return couponId, nil
+
+}
+
+func (cr *productDataBase) CouponUsed(ctx context.Context, userID string, couponID int) (bool, error) {
+	var isUsed bool
+	checkQuery := `SELECT
+	 				EXISTS(SELECT 1 FROM orders WHERE user_id=$1 AND coupon_id=$2);`
+
+	err := cr.DB.Raw(checkQuery, userID, couponID).Scan(&isUsed).Error
+	if err != nil {
+		return false, err
+
+	}
+	return isUsed, nil
+}

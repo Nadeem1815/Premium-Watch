@@ -331,3 +331,35 @@ func (cr *ProductHandler) ViewAllCoupon(c *gin.Context) {
 	})
 
 }
+
+func (cr *ProductHandler) ViewCouponById(c *gin.Context) {
+	paramID := c.Param("couponid")
+	couponID, err := strconv.Atoi(paramID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "failed parse couponId",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	couponInfo, err := cr.productUseCase.ViewCouponById(c.Request.Context(), couponID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "failed fetch coupon ",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "coupon is ",
+		Data:       couponInfo,
+		Errors:     nil,
+	})
+}

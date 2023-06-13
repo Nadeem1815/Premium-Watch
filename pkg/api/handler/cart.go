@@ -114,3 +114,36 @@ func (cr *CartHandler) ViewCart(c *gin.Context) {
 	})
 
 }
+
+func (cr *CartHandler) AddCouponToCart(c *gin.Context) {
+	userID := fmt.Sprintf("%v", c.Value("userID"))
+	paramsID := c.Param("couponid")
+	couponID, err := strconv.Atoi(paramsID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "failed request",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	cart, err := cr.cartUseCase.AddCouponToCart(c.Request.Context(), userID, couponID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "failed coupon add to cart",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "coupon added to cart successfuly",
+		Data:       cart,
+		Errors:     nil,
+	})
+
+}
+

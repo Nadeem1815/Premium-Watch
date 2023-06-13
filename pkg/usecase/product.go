@@ -80,11 +80,20 @@ func (cr *productUseCase) DeleteCoupon(ctx context.Context, couponID int) error 
 	return err
 }
 
-func(cr *productUseCase)ViewAllCoupon() ([]domain.Coupon, error){
-	viewAllCoupons,err:=cr.productRepo.ViewAllCoupon()
-	if err!=nil {
-		return []domain.Coupon{},err
-		
+func (cr *productUseCase) ViewAllCoupon() ([]domain.Coupon, error) {
+	viewAllCoupons, err := cr.productRepo.ViewAllCoupon()
+	if err != nil {
+		return []domain.Coupon{}, err
+
 	}
-	return viewAllCoupons,nil
+	return viewAllCoupons, nil
+}
+
+func (cr *productUseCase) ViewCouponById(ctx context.Context, couponID int) (domain.Coupon, error) {
+	couponsID, err := cr.productRepo.ViewCouponById(ctx, couponID)
+	if err != nil {
+		return domain.Coupon{}, err
+
+	}
+	return couponsID, nil
 }

@@ -21,4 +21,5 @@ type ProductUseCase interface {
 	UpdateCoupon(ctx context.Context, UpdatedCoupon model.UpdatCoupon) (domain.Coupon, error)
 	DeleteCoupon(ctx context.Context, couponID int) error
 	ViewAllCoupon() ([]domain.Coupon, error)
+	ViewCouponById(ctx context.Context, couponID int) (domain.Coupon, error)
 }

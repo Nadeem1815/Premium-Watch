@@ -54,6 +54,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	// cart routes
 	userapi.POST("/cart/:product_id", cartHandler.AddToCart)
 	userapi.DELETE("/remove/:product_id", cartHandler.RemoveTOCart)
+	userapi.POST("addcoupon/:couponid", cartHandler.AddCouponToCart)
 	userapi.GET("/carts", cartHandler.ViewCart)
 
 	// order routes
@@ -61,6 +62,10 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	userapi.PUT("/cancelorder/:oderid", orderHandler.UserCancelOrder)
 	userapi.GET("/view", orderHandler.ViewAllOrder)
 	userapi.GET("/viewid/:order_id", orderHandler.ViewOrderID)
+
+	// coupon routes
+	userapi.GET("/viewallcoupons", productHandler.ViewAllCoupon)
+	userapi.GET("/coupon/:couponid", productHandler.ViewCouponById)
 
 	// payment routes
 	userapi.GET("/razorpay/:order_id", paymentHandler.CreateRazorPayment)

@@ -105,6 +105,40 @@ func (cr *CartDataBase) AddToCart(ctx context.Context, userID string, productID 
 		tx.Rollback()
 		return domain.CartItems{}, err
 	}
+
+	// check if the cart has a coupon
+	var coupontID int
+	err = tx.Raw("SELECT COALESCE(coupon_id,0)FROM carts WHERE user_id=$1", userID).Scan(&coupontID).Error
+	if err != nil {
+		tx.Rollback()
+		return domain.CartItems{}, err
+
+	}
+	// if cart has coupon
+	if coupontID != 0 {
+		// fetch coupon details
+		var couponInfo domain.Coupon
+		err = tx.Raw("SELECT *FROM coupons WHERE id=$1", coupontID).Scan(&couponInfo).Error
+		if err != nil {
+			tx.Rollback()
+			return domain.CartItems{}, err
+
+		}
+		discount := newSubTotal * (couponInfo.DiscountMaxAmount / 100)
+		if discount > couponInfo.DiscountMaxAmount {
+			discount = couponInfo.DiscountMaxAmount
+
+		}
+		updatedTotal := newTotal - discount
+		// update cart table
+		err = tx.Exec("UPDATED carts SET discount=&1,total=$2 WHERE user_id=$3", discount, updatedTotal, userID).Error
+		if err != nil {
+			tx.Rollback()
+			return domain.CartItems{}, err
+
+		}
+	}
+
 	// commit transaction
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
@@ -181,15 +215,17 @@ func (cr *CartDataBase) ViewCart(ctx context.Context, userID string) (model.View
 	//  find cart_id from cart tables
 	var cartDetails struct {
 		ID       int
+		CouponID int
 		SubTotal float64
+		Discount float64
 		Total    float64
 	}
-	err := tx.Raw("SELECT id,sub_total,total FROM carts WHERE user_id=$1", userID).Scan(&cartDetails).Error
+	err := tx.Raw("SELECT id,coupon_id,sub_total,total FROM carts WHERE user_id=$1", userID).Scan(&cartDetails).Error
 	if err != nil {
 		tx.Rollback()
 		return model.ViewCart{}, err
 	}
-	fmt.Printf("%+v", cartDetails)
+	// fmt.Printf("%+v", cartDetails)
 	var items []model.DisplayCart
 
 	selectItems := ` select p.id,p.name, p.price, p.brand, p.colour,p.product_image,p.sku,c.quantity,c.item_total as total from products p JOIN cart_items c on c.product_id=p.id where c.cart_id=$1`
@@ -205,11 +241,65 @@ func (cr *CartDataBase) ViewCart(ctx context.Context, userID string) (model.View
 	}
 
 	var finalCart model.ViewCart
-
+	finalCart.CouponID = cartDetails.CouponID
 	finalCart.SubTotal = cartDetails.SubTotal
+	finalCart.Discount = cartDetails.Discount
 	finalCart.Total = cartDetails.Total
 
 	finalCart.CartItmes = items
 
 	return finalCart, nil
 }
+
+func (cr *CartDataBase) AddCouponToCart(ctx context.Context, userID string, couponID int) (model.ViewCart, error) {
+	// fetch couponDetail
+	var couponInfo domain.Coupon
+	fetchCoupon := `SELECT *FROM coupons WHERE id=$1`
+	err := cr.DB.Raw(fetchCoupon, couponID).Scan(&couponInfo).Error
+	if err != nil {
+		return model.ViewCart{}, err
+
+	}
+	if couponInfo.ID == 0 {
+		return model.ViewCart{}, fmt.Errorf("no coupon found")
+
+	}
+	// fetch cart details
+	var cartInfo domain.Cart
+	fetchCart := `SELECT *FROM carts WHERE user_id=$1`
+	err = cr.DB.Raw(fetchCart, userID).Scan(&cartInfo).Error
+	if err != nil {
+		return model.ViewCart{}, err
+	}
+	if cartInfo.ID == 0 {
+		return model.ViewCart{}, fmt.Errorf("your cart is empty can't add coupon")
+
+	}
+	// check this coupon for can apply for this cart total a mount
+	if cartInfo.SubTotal < couponInfo.MinOrderValue {
+		return model.ViewCart{}, fmt.Errorf("this coupon cant apply for this cart amount")
+
+	}
+	//  calculate discount amount
+	discount := cartInfo.SubTotal * (couponInfo.DiscountPercent / 100)
+	if discount > couponInfo.DiscountMaxAmount {
+		discount = couponInfo.DiscountMaxAmount
+
+	}
+	total := cartInfo.SubTotal - discount
+
+	// update cart
+	updateCartQuery := `UPDATE carts SET coupon_id=$1, discount=$2,total=$3 WHERE user_id = $4`
+	err = cr.DB.Exec(updateCartQuery, couponID, discount, total, userID).Error
+	if err != nil {
+		return model.ViewCart{}, err
+
+	}
+	cart, err := cr.ViewCart(ctx, userID)
+	if err != nil {
+		return model.ViewCart{}, err
+
+	}
+	return cart, nil
+}
+
