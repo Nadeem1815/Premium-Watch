@@ -61,7 +61,7 @@ func (cr *OrderDatabase) BuyAll(ctx context.Context, body model.PlaceOrder, user
 
 	}
 	// update cart table
-	updateCartTable := `UPDATE carts SET sub_total=0,total=0 WHERE user_id=$1`
+	updateCartTable := `UPDATE carts SET coupon_id=0,sub_total=0,total=0 WHERE user_id=$1`
 	err = tx.Exec(updateCartTable, userID).Error
 	if err != nil {
 		tx.Rollback()
@@ -215,7 +215,7 @@ func (cr *OrderDatabase) ViewAllOrder(ctx context.Context, UserID string) ([]dom
 
 func (cr *OrderDatabase) ViewOrderID(ctx context.Context, userID string, orderID int) (domain.Order, error) {
 	var viewOrderId domain.Order
-	vieworderdQuery := "SELECT *FROM orders WHERE user_id=$1 AND id=$2"
+	vieworderdQuery := `SELECT *FROM orders WHERE user_id=$1 AND id=$2;`
 	err := cr.DB.Raw(vieworderdQuery, userID, orderID).Scan(&viewOrderId).Error
 	if err != nil {
 		return domain.Order{}, err
@@ -226,4 +226,23 @@ func (cr *OrderDatabase) ViewOrderID(ctx context.Context, userID string, orderID
 
 	}
 	return viewOrderId, nil
+}
+
+func (cr *OrderDatabase) ReturnReq(ctx context.Context, retrurnReqst model.RetrunRequest) (domain.Order, error) {
+	// update retrun request :update order table and insert values retrun table
+	tx := cr.DB.Begin()
+	var orderDts domain.Order
+	upadateOrderQuery := ` UPDATE orders SET order_status_id=4 WHERE id=$1 RETURNING*; `
+	if err := tx.Raw(upadateOrderQuery, retrurnReqst.OrderID).Scan(&orderDts).Error; err != nil {
+		tx.Rollback()
+		return domain.Order{}, err
+	}
+	updatedRetrunQuery := `INSERT INTO returns (order_id) VALUES($1);`
+	if err := tx.Exec(updatedRetrunQuery, retrurnReqst.OrderID).Error; err != nil {
+		tx.Rollback()
+		return domain.Order{}, err
+
+	}
+	tx.Commit()
+	return orderDts, nil
 }

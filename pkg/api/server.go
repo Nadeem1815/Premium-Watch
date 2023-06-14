@@ -62,6 +62,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	userapi.PUT("/cancelorder/:oderid", orderHandler.UserCancelOrder)
 	userapi.GET("/view", orderHandler.ViewAllOrder)
 	userapi.GET("/viewid/:order_id", orderHandler.ViewOrderID)
+	userapi.POST("/return", orderHandler.RetrunReq)
 
 	// coupon routes
 	userapi.GET("/viewallcoupons", productHandler.ViewAllCoupon)

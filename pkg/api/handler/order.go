@@ -170,3 +170,36 @@ func (cr *OrderHandler) ViewOrderID(c *gin.Context) {
 		Errors:     nil,
 	})
 }
+
+func (cr *OrderHandler) RetrunReq(c *gin.Context) {
+	var orderId model.RetrunRequest
+	if err := c.Bind(&orderId); err != nil {
+
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "failed to read request body",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	userID := fmt.Sprintf("%v", c.Value("userID"))
+	returnRequest, err := cr.orderUseCase.ReturnReq(c.Request.Context(), userID,orderId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "return failed",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	c.JSON(http.StatusOK, response.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Return Request Successfuly",
+		Data:       returnRequest,
+		Errors:     nil,
+	})
+
+}

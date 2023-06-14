@@ -16,7 +16,7 @@ type Order struct {
 	CouponID          uint           `json:"coupon_id"`
 	OrderStatus       OrderStatus    `gorm:"foreignKey:OrderStatusID" json:"-"`
 	DeliveryStatusID  uint           `json:"delivery_status_id"`
-	DeliveryStatus    DeliveryStatus `gorm:"foreignKey:DeliveryStatusID"`
+	DeliveryStatus    DeliveryStatus `gorm:"foreignKey:DeliveryStatusID" json:"-"`
 	DeliveryUpdatedAt time.Time      `json:"delivery_time"`
 }
 
@@ -38,4 +38,10 @@ type OrderStatus struct {
 type DeliveryStatus struct {
 	ID     uint   `json:"id" gorm:"primaryKey"`
 	Status string `json:"status"`
+}
+
+type Return struct {
+	ID      uint  `gorm:"primaryKey"`
+	OrderID int   `json:"order_id"`
+	Order   Order `gorm:"foreignKey:OrderID" json:"-"`
 }

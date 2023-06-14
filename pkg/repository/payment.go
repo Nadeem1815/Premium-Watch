@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nadeem1815/premium-watch/pkg/domain"
 	interfaces "github.com/nadeem1815/premium-watch/pkg/repository/interface"
@@ -29,9 +30,13 @@ func (cr *paymentDataBase) ViewPaymenDetails(ctx context.Context, orderID int) (
 
 func (cr *paymentDataBase) UpdatePaymentDetails(ctx context.Context, OrderID int, PaymentRef string) (domain.PaymentDetails, error) {
 	var updatePayment domain.PaymentDetails
-
-	updatePaymentQuery := `UPDATE payment_details SET  payment_method_id=2,payment_status_id=2, payment_ref = $1,updated_at=NOW()
-							WHERE order_id=$2 RETURNING *;`
+	fmt.Println("repo ref 3", PaymentRef)
+	updatePaymentQuery := `UPDATE payment_details 
+								SET payment_method_id = 2, 
+									payment_status_id = 2, 										payment_ref = $1, 
+									updated_at = NOW() 
+								WHERE order_id = $2 
+								RETURNING *;`
 	err := cr.DB.Raw(updatePaymentQuery, PaymentRef, OrderID).Scan(&updatePayment).Error
 	if err != nil {
 		return domain.PaymentDetails{}, err

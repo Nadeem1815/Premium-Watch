@@ -181,3 +181,23 @@ func (cr *AdminHandler) DashBoard(c *gin.Context) {
 		Errors:     nil,
 	})
 }
+
+
+// func (cr *AdminHandler)SalesReport(c *gin.Context){
+// 	salesReport,err:=cr.adminusecase.SalesReport(c.Request.Context())
+// 	if err!=nil{
+// 		c.JSON(http.StatusBadRequest,response.Response{
+// 			StatusCode: http.StatusBadRequest,
+// 			Message: "failed to read request body ",
+// 			Data: nil,
+// 			Errors: err.Error(),
+// 		})
+// 		return
+// 	}
+// 	// set headers for downloading in browser 
+// 	  // Set the appropriate headers for the download
+// 	  c.Header("Content-Type", "text/csv")
+// 	  c.Header("Content-Disposition", "attachment;filename=premiumwatch.csv")
+	  
+
+// }

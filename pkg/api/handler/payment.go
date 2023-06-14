@@ -99,6 +99,7 @@ func (cr *PaymentHandler) PaymentSuccess(c *gin.Context) {
 		PaymentRef: paymentRef,
 		Total:      total,
 	}
+	fmt.Println("paymnetnredff11", paymentRef)
 	err = cr.paymentUseCase.UpatePaymentDetails(c.Request.Context(), paymentVarifier)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.Response{

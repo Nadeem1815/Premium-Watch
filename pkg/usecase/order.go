@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/nadeem1815/premium-watch/pkg/domain"
 	interfaces "github.com/nadeem1815/premium-watch/pkg/repository/interface"
@@ -55,4 +56,32 @@ func (cr *OrderUseCase) ViewAllOrder(ctx context.Context, UserID string) ([]doma
 func (cr *OrderUseCase) ViewOrderID(ctx context.Context, userID string, orderID int) (domain.Order, error) {
 	viewOrderID, err := cr.orderRepo.ViewOrderID(ctx, userID, orderID)
 	return viewOrderID, err
+}
+
+func (cr *OrderUseCase) ReturnReq(ctx context.Context, userID string, retrurnReqst model.RetrunRequest) (domain.Order, error) {
+	// check if order is eligible to be returned
+
+	orderDetails, err := cr.orderRepo.ViewOrderID(ctx, userID, retrurnReqst.OrderID)
+	if err != nil {
+		return domain.Order{}, err
+
+	}
+	if orderDetails.ID == 0 {
+		return domain.Order{}, fmt.Errorf("no orders")
+
+	}
+	if orderDetails.DeliveryUpdatedAt.Sub(time.Now()) > time.Hour*24*14 {
+		return domain.Order{}, fmt.Errorf("failed retrun your order more then 15 days ")
+	}
+	if orderDetails.OrderStatusID != 1 || orderDetails.DeliveryStatusID != 2 {
+		return domain.Order{}, fmt.Errorf("cannot return order status %v and delivery status %v", orderDetails.OrderStatusID, orderDetails.DeliveryStatusID)
+
+	}
+	orderId, err := cr.orderRepo.ReturnReq(ctx, retrurnReqst)
+	if err != nil {
+		return domain.Order{}, fmt.Errorf("request failed")
+
+	}
+	return orderId, nil
+
 }

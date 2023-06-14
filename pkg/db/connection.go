@@ -43,6 +43,7 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 		&domain.OrderItem{},
 		&domain.OrderStatus{},
 		&domain.DeliveryStatus{},
+		&domain.Return{},
 
 		// payment table
 		&domain.PaymentDetails{},

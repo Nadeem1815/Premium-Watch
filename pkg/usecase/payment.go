@@ -84,7 +84,8 @@ func (cr *paymentUseCase) UpatePaymentDetails(ctx context.Context, paymentVarifi
 		return fmt.Errorf("payment and order amount does not match")
 
 	}
-	updatePayment, err := cr.paymentRepo.UpdatePaymentDetails(ctx, paymentVarifier.OrderID, paymentDetails.PaymentRef)
+	fmt.Println("paymentUsaCase 2", paymentVarifier.PaymentRef)
+	updatePayment, err := cr.paymentRepo.UpdatePaymentDetails(ctx, paymentVarifier.OrderID, paymentVarifier.PaymentRef)
 	if err != nil {
 		return err
 
