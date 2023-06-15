@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type AdminLogin struct {
 	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required,email"`
@@ -23,4 +25,15 @@ type AdminDashBoard struct {
 
 	TotalUsers   int `json:"total_users,omitempty"`
 	OrderedUsers int `json:"ordered_users,omitempty"`
+}
+
+type SalesReport struct {
+	OrderID        int
+	UserID         string
+	Total          float64
+	CouponCode     string
+	PaymentMethod  string
+	OrderStatus    string
+	DeliveryStatus string
+	OrderDate      time.Time
 }

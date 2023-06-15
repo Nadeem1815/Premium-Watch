@@ -124,3 +124,35 @@ func (cr *adminDatabase) DashBoard(ctx context.Context) (model.AdminDashBoard, e
 	}
 	return dashBoard, nil
 }
+
+func (cr *adminDatabase) SalesRepo(ctx context.Context) ([]model.SalesReport, error) {
+	var salesData []model.SalesReport
+	saleDataReport := `SELECT 
+									o.id AS order_id,
+									o.user_id,
+									o.order_total AS total,
+									c.code AS coupon_code,
+									pm.payment_method,
+									os.order_status,
+									ds.status AS delivery_status,
+									o.order_date
+						FROM 		
+									orders o
+						LEFT JOIN	
+									payment_methods pm ON o.payment_method_id=pm.id
+						LEFT JOIN	
+									order_statuses os ON o.order_status_id=os.id
+						LEFT JOIN
+									delivery_statuses ds ON o.delivery_status_id=ds.id
+						LEFT JOIN 
+									coupons c ON o.coupon_id=c.id;`
+
+	if err := cr.DB.Raw(saleDataReport).Scan(&salesData).Error; err != nil {
+		return []model.SalesReport{}, err
+	}
+	// for _, sale := range salesData {
+	// 	fmt.Println("Delivery Status:", sale.DeliveryStatus)
+	// }
+	return salesData, nil
+
+}

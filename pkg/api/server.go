@@ -82,6 +82,7 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	admin.Use(middleware.AdminAuth)
 	admin.POST("/logout", adminHandler.AdminLogout)
 	admin.GET("/dashboard", adminHandler.DashBoard)
+	admin.GET("/download", adminHandler.SalesRepo)
 
 	// user management
 	admin.PATCH("/block_user/:user_id", userHandler.BlockedUser)

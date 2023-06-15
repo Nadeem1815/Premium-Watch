@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/csv"
 	"fmt"
 	"net/http"
 
@@ -20,6 +21,8 @@ func NewAdminHandler(adminUseCase services.AdminUseCase) *AdminHandler {
 		adminusecase: adminUseCase,
 	}
 }
+
+
 
 func (cr *AdminHandler) AdminSingUP(c *gin.Context) {
 	var newAdmin domain.Admin
@@ -182,22 +185,64 @@ func (cr *AdminHandler) DashBoard(c *gin.Context) {
 	})
 }
 
+func (cr *AdminHandler) SalesRepo(c *gin.Context) {
+	salesReport, err := cr.adminusecase.SalesRepo(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    "failed to read request body ",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+	// set headers for downloading in browser
+	// Set the appropriate headers for the download
+	c.Header("Content-Type", "text/csv")
+	c.Header("Content-Disposition", "attachment;filename=premiumwatch.csv")
 
-// func (cr *AdminHandler)SalesReport(c *gin.Context){
-// 	salesReport,err:=cr.adminusecase.SalesReport(c.Request.Context())
-// 	if err!=nil{
-// 		c.JSON(http.StatusBadRequest,response.Response{
-// 			StatusCode: http.StatusBadRequest,
-// 			Message: "failed to read request body ",
-// 			Data: nil,
-// 			Errors: err.Error(),
-// 		})
-// 		return
-// 	}
-// 	// set headers for downloading in browser 
-// 	  // Set the appropriate headers for the download
-// 	  c.Header("Content-Type", "text/csv")
-// 	  c.Header("Content-Disposition", "attachment;filename=premiumwatch.csv")
-	  
+	// Create a CSV writer using our response writer as our io.Writer
+	wr := csv.NewWriter(c.Writer)
 
-// }
+	// Write CSV header row
+	headers := []string{"OrderID", "UserID", "Total", "CouponCode", "Payment Method", "Order Status", "Delivery Status", "Order Date"}
+	if err := wr.Write(headers); err != nil {
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "failed to generate sales report",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+	}
+
+	if err := wr.Error(); err != nil {
+
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "failed to generate sales report",
+			Data:       nil,
+			Errors:     err.Error(),
+		})
+		return
+
+	}
+	for _, sales := range salesReport {
+		row := []string{
+			fmt.Sprintf("%v", sales.OrderID),
+			sales.UserID,
+			fmt.Sprintf("%v", sales.Total),
+			sales.CouponCode,
+			sales.PaymentMethod,
+			sales.OrderStatus,
+			sales.DeliveryStatus,
+			sales.OrderDate.Format("2006-01-02 15:04:05")}
+		fmt.Println("delivery:", sales.DeliveryStatus)
+		if err := wr.Write(row); err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+	}
+	// Flush the writer's buffer to ensure all data is written to the client
+	wr.Flush()
+}

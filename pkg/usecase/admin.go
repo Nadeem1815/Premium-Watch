@@ -99,3 +99,9 @@ func (c *adminUseCase) DashBoard(ctx context.Context) (model.AdminDashBoard, err
 	adminDashBoard, err := c.adminRepo.DashBoard(ctx)
 	return adminDashBoard, err
 }
+
+func (c *adminUseCase) SalesRepo(ctx context.Context) ([]model.SalesReport, error) {
+	sales, err := c.adminRepo.SalesRepo(ctx)
+	fmt.Println("usecAse:",)
+	return sales, err
+}
