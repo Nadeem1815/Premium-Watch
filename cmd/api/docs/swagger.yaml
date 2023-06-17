@@ -1,4 +1,721 @@
+basePath: /
+definitions:
+  github_com_nadeem1815_premium-watch_pkg_domain.Admin:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      password:
+        type: string
+      user_name:
+        type: string
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.AddressInput:
+    properties:
+      district:
+        type: string
+      house_name:
+        type: string
+      landmark:
+        type: string
+      pincode:
+        type: integer
+      state:
+        type: string
+      street:
+        type: string
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.AdminLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.PlaceOrder:
+    properties:
+      payment_method_id:
+        type: integer
+      shipping_address_id:
+        type: integer
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.RetrunRequest:
+    properties:
+      order_id:
+        type: integer
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder:
+    properties:
+      delivery_status_id:
+        type: integer
+      order_id:
+        type: integer
+      status_id:
+        type: integer
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.UsarDataInput:
+    properties:
+      email_id:
+        type: string
+      name:
+        type: string
+      password:
+        maxLength: 64
+        minLength: 8
+        type: string
+      phone:
+        type: string
+      surname:
+        type: string
+    required:
+    - email_id
+    - password
+    - phone
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.UserLoginEmail:
+    properties:
+      email_id:
+        type: string
+      password:
+        maxLength: 64
+        minLength: 8
+        type: string
+    required:
+    - email_id
+    - password
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_response.Response:
+    properties:
+      data: {}
+      errors: {}
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+host: localhost:3000
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: nadeemf408@gmail.com
+    name: Nadeem Fahad
+    url: https://github.com/Nadeem1815
+  description: Ecommerce REST API built using Go Lang, PSQL, REST API following Clean
+    Architecture. Hosted with Ngnix, AWS EC2 and RDS
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Ecommerce REST API
+  version: "1.0"
+paths:
+  /admin/block_user/:user_id:
+    patch:
+      consumes:
+      - application/json
+      description: Admin Blocked for user
+      operationId: admin-block-user
+      parameters:
+      - description: ID of the user to be blocked
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Admin Blocked USer
+      tags:
+      - User
+  /admin/dashboard:
+    get:
+      consumes:
+      - application/json
+      description: Admin Can access dashboard and view details of recoding orders,products
+        etc
+      operationId: dash_board
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: DashBoard
+      tags:
+      - Admin
+  /admin/download:
+    get:
+      consumes:
+      - application/json
+      description: Admin can download total sales report in csv.format
+      operationId: sales_report
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Sales Report
+      tags:
+      - Admin
+  /admin/find_userid/:user_id:
+    get:
+      consumes:
+      - application/json
+      description: Admin Can Find All Register Users details find By user id
+      operationId: find-user-id
+      parameters:
+      - description: ID of the user to be fetched
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Find User By Id
+      tags:
+      - Admin
+  /admin/list_all_user:
+    get:
+      consumes:
+      - application/json
+      description: Admin Can List All Register Users
+      operationId: list-all-users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: List All Users
+      tags:
+      - Admin
+  /admin/login/email:
+    post:
+      consumes:
+      - application/json
+      description: Admin login
+      operationId: admin-login
+      parameters:
+      - description: Admin login credentials
+        in: body
+        name: admin_credentials
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.AdminLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Admin Login
+      tags:
+      - Admin
+  /admin/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out a logged-in admin from the E-commerce web api admin panel
+      operationId: admin-logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Admin Logout
+      tags:
+      - Admin
+  /admin/register:
+    post:
+      consumes:
+      - application/json
+      description: New Admin Registration.
+      operationId: admin-signup
+      parameters:
+      - description: 'Register Admin '
+        in: body
+        name: newAdmin
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_domain.Admin'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Admin SignUp
+      tags:
+      - Admin
+  /admin/unblock_user/:user_id:
+    patch:
+      consumes:
+      - application/json
+      description: Admin UnBlocked for user
+      operationId: admin-unblock-user
+      parameters:
+      - description: ID of the user to be Unblocked
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Admin UnBlocked USer
+      tags:
+      - User
+  /user/addcoupon/{couponid}:
+    post:
+      consumes:
+      - application/json
+      description: User Can Add coupon To Cart
+      operationId: add-coupon-to-cart
+      parameters:
+      - description: couponid
+        in: path
+        name: couponid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: User Can Add coupon To Cart
+      tags:
+      - Cart
+  /user/address:
+    post:
+      consumes:
+      - application/json
+      description: User add address field
+      operationId: user-addaddress
+      parameters:
+      - description: User add Address
+        in: body
+        name: user_address
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.AddressInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: User Add Address
+      tags:
+      - User
+  /user/buy_all:
+    post:
+      consumes:
+      - application/json
+      description: User OrderProduct From Carts
+      operationId: user-order-product
+      parameters:
+      - description: order Details
+        in: body
+        name: order_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.PlaceOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: User BuyAllProduct from cart
+      tags:
+      - Order
+  /user/cancelorder/{oderid}:
+    put:
+      consumes:
+      - application/json
+      description: Update order for Admin
+      operationId: update-order
+      parameters:
+      - description: orderid
+        in: body
+        name: updating_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Update Order for Admin
+      tags:
+      - Order
+  /user/cart/{product_id}:
+    post:
+      consumes:
+      - application/json
+      description: User Can add product To Cart
+      operationId: user-add-to-cart-
+      parameters:
+      - description: product_item_id
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: User Add Product To Cart By ProductId
+      tags:
+      - Cart
+  /user/carts:
+    get:
+      consumes:
+      - application/json
+      description: User Can View Cart and Total Amount
+      operationId: View-cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: User Can View Cart and Total Amount
+      tags:
+      - Cart
+  /user/home:
+    get:
+      consumes:
+      - application/json
+      description: when login user can see home page
+      operationId: home
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: HomePage
+      tags:
+      - User
+  /user/login/email:
+    post:
+      consumes:
+      - application/json
+      description: User login With Email
+      operationId: login-with-email
+      parameters:
+      - description: User login credentials
+        in: body
+        name: User_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UserLoginEmail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: LoginWithEmail
+      tags:
+      - User
+  /user/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out a logged-in user from the E-commerce web api user panel
+      operationId: user-logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: User Logout
+      tags:
+      - User
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: New User  can Registration.
+      operationId: user-signup
+      parameters:
+      - description: Register User
+        in: body
+        name: user_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UsarDataInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: User SignUp
+      tags:
+      - User
+  /user/remove/{product_id}:
+    delete:
+      consumes:
+      - application/json
+      description: User Can Remove product To Cart
+      operationId: user-remove-to-cart-
+      parameters:
+      - description: product_item_id
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: User Remove Product To Cart By ProductId
+      tags:
+      - Cart
+  /user/return:
+    post:
+      consumes:
+      - application/json
+      description: ReturnRequest From  users
+      operationId: retrunreq-user
+      parameters:
+      - description: Return details
+        in: body
+        name: return_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.RetrunRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: ReturnRequest From  users
+      tags:
+      - Order
+  /user/view:
+    get:
+      consumes:
+      - application/json
+      description: Endpoint for getting all orders associated with a user
+      operationId: view-all-orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Retrieves all orders of currently logged in user
+      tags:
+      - Order
+  /user/viewid/{order_id}:
+    get:
+      consumes:
+      - application/json
+      description: Endpoint for getting  specific orders associated with a user
+      operationId: view-orderID
+      parameters:
+      - description: orderid
+        in: path
+        name: order_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Retrieves  ordersbyID of currently logged in user
+      tags:
+      - Order
 swagger: "2.0"

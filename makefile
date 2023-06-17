@@ -38,7 +38,7 @@ wire: ## Generate wire_gen.go
 	cd pkg/di && wire
 
 swag:
-	swag init -g pkg/api/handler/user.go -o ./cmd/api/docs
+	swag init -g cmd/api/main.go --parseDependency -o ./cmd/api/docs
 
 swag: ## Generate swagger docs # cd cmd/api && swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs
 

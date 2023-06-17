@@ -20,6 +20,18 @@ func NewCartHandler(usecase services.CartUseCase) *CartHandler {
 	}
 }
 
+// AddProductToCart
+// @Summary User Add Product To Cart By ProductId
+// @ID user-add-to-cart-
+// @Description User Can add product To Cart
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Param product_id path string true "product_item_id"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router /user/cart/{product_id}  [post]
 func (cr *CartHandler) AddToCart(c *gin.Context) {
 	pararmsID := c.Param("product_id")
 	productID, err := strconv.Atoi(pararmsID)
@@ -53,6 +65,18 @@ func (cr *CartHandler) AddToCart(c *gin.Context) {
 	})
 }
 
+// RemoveProductToCart
+// @Summary User Remove Product To Cart By ProductId
+// @ID user-remove-to-cart-
+// @Description User Can Remove product To Cart
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Param product_id path string true "product_item_id"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router /user/remove/{product_id}  [delete]
 func (cr *CartHandler) RemoveTOCart(c *gin.Context) {
 	paramsID := c.Param("product_id")
 	productID, err := strconv.Atoi(paramsID)
@@ -85,6 +109,16 @@ func (cr *CartHandler) RemoveTOCart(c *gin.Context) {
 	})
 }
 
+// ViewCarts
+// @Summary User Can View Cart and Total Amount
+// @ID View-cart
+// @Description User Can View Cart and Total Amount
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router  /user/carts  [get]
 func (cr *CartHandler) ViewCart(c *gin.Context) {
 	userID := fmt.Sprintf("%v", c.Value("userID"))
 	// if err != nil {
@@ -115,6 +149,18 @@ func (cr *CartHandler) ViewCart(c *gin.Context) {
 
 }
 
+// AddCouponToCart
+// @Summary User Can Add coupon To Cart
+// @ID add-coupon-to-cart
+// @Description User Can Add coupon To Cart
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Param couponid path string true "couponid"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router  /user/addcoupon/{couponid}  [post]
 func (cr *CartHandler) AddCouponToCart(c *gin.Context) {
 	userID := fmt.Sprintf("%v", c.Value("userID"))
 	paramsID := c.Param("couponid")
@@ -146,4 +192,3 @@ func (cr *CartHandler) AddCouponToCart(c *gin.Context) {
 	})
 
 }
-

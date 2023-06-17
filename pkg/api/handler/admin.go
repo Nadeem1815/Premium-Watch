@@ -22,8 +22,18 @@ func NewAdminHandler(adminUseCase services.AdminUseCase) *AdminHandler {
 	}
 }
 
-
-
+// AdminSignUp
+// @Summary Admin SignUp
+// @ID admin-signup
+// @Description New Admin Registration.
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param newAdmin body domain.Admin true "Register Admin "
+// @Success 201 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router /admin/register [post]
 func (cr *AdminHandler) AdminSingUP(c *gin.Context) {
 	var newAdmin domain.Admin
 	if err := c.Bind(&newAdmin); err != nil {
@@ -55,6 +65,18 @@ func (cr *AdminHandler) AdminSingUP(c *gin.Context) {
 	})
 }
 
+// AdminLogin
+// @Summary Admin Login
+// @ID admin-login
+// @Description Admin login
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param admin_credentials body model.AdminLogin true "Admin login credentials"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router /admin/login/email  [post]
 func (cr *AdminHandler) LoginAdmin(c *gin.Context) {
 	// recieve data from request
 	var admin model.AdminLogin
@@ -93,6 +115,17 @@ func (cr *AdminHandler) LoginAdmin(c *gin.Context) {
 
 }
 
+// AdminLogout
+// @Summary Admin Logout
+// @ID admin-logout
+// @Description Logs out a logged-in admin from the E-commerce web api admin panel
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /admin/logout [post]
 func (cr *AdminHandler) AdminLogout(c *gin.Context) {
 	c.Writer.Header().Set("cache-control", "no-cache,no-store,must-revalidate")
 	c.SetSameSite(http.SameSiteLaxMode)
@@ -113,6 +146,16 @@ func (cr *AdminHandler) AdminLogout(c *gin.Context) {
 // 	}
 // }
 
+// ListAllUsers
+// @Summary List All Users
+// @ID list-all-users
+// @Description Admin Can List All Register Users
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router  /admin/list_all_user  [get]
 func (cr *AdminHandler) ListAllUsers(c *gin.Context) {
 	listUser, err := cr.adminusecase.ListAllUsers()
 	if err != nil {
@@ -133,6 +176,17 @@ func (cr *AdminHandler) ListAllUsers(c *gin.Context) {
 	})
 }
 
+// FindUserById
+// @Summary Find User By Id
+// @ID find-user-id
+// @Description Admin Can Find All Register Users details find By user id
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param user_id path string true "ID of the user to be fetched"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /admin/find_userid/:user_id  [get]
 func (cr *AdminHandler) FindUserId(c *gin.Context) {
 	paramsId := c.Query("user_id")
 	// fmt.Println(paramsId, "///////////")
@@ -165,6 +219,16 @@ func (cr *AdminHandler) FindUserId(c *gin.Context) {
 	})
 }
 
+// DashBoard
+// @Summary DashBoard
+// @ID dash_board
+// @Description Admin Can access dashboard and view details of recoding orders,products etc
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router  /admin/dashboard  [get]
 func (cr *AdminHandler) DashBoard(c *gin.Context) {
 	dashBoard, err := cr.adminusecase.DashBoard(c.Request.Context())
 	if err != nil {
@@ -185,6 +249,17 @@ func (cr *AdminHandler) DashBoard(c *gin.Context) {
 	})
 }
 
+// SalesReport
+// @Summary Sales Report
+// @ID sales_report
+// @Description Admin can download total sales report in csv.format
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router  /admin/download  [get]
 func (cr *AdminHandler) SalesRepo(c *gin.Context) {
 	salesReport, err := cr.adminusecase.SalesRepo(c.Request.Context())
 	if err != nil {

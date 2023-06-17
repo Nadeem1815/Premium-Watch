@@ -1,7 +1,1081 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "Ecommerce REST API built using Go Lang, PSQL, REST API following Clean Architecture. Hosted with Ngnix, AWS EC2 and RDS",
+        "title": "Ecommerce REST API",
+        "contact": {
+            "name": "Nadeem Fahad",
+            "url": "https://github.com/Nadeem1815",
+            "email": "nadeemf408@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
     },
-    "paths": {}
+    "host": "localhost:3000",
+    "basePath": "/",
+    "paths": {
+        "/admin/block_user/:user_id": {
+            "patch": {
+                "description": "Admin Blocked for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Admin Blocked USer",
+                "operationId": "admin-block-user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the user to be blocked",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/dashboard": {
+            "get": {
+                "description": "Admin Can access dashboard and view details of recoding orders,products etc",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "DashBoard",
+                "operationId": "dash_board",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/download": {
+            "get": {
+                "description": "Admin can download total sales report in csv.format",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Sales Report",
+                "operationId": "sales_report",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/find_userid/:user_id": {
+            "get": {
+                "description": "Admin Can Find All Register Users details find By user id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Find User By Id",
+                "operationId": "find-user-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the user to be fetched",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/list_all_user": {
+            "get": {
+                "description": "Admin Can List All Register Users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "List All Users",
+                "operationId": "list-all-users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/login/email": {
+            "post": {
+                "description": "Admin login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Admin Login",
+                "operationId": "admin-login",
+                "parameters": [
+                    {
+                        "description": "Admin login credentials",
+                        "name": "admin_credentials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.AdminLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/logout": {
+            "post": {
+                "description": "Logs out a logged-in admin from the E-commerce web api admin panel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Admin Logout",
+                "operationId": "admin-logout",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/register": {
+            "post": {
+                "description": "New Admin Registration.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Admin SignUp",
+                "operationId": "admin-signup",
+                "parameters": [
+                    {
+                        "description": "Register Admin ",
+                        "name": "newAdmin",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_domain.Admin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/unblock_user/:user_id": {
+            "patch": {
+                "description": "Admin UnBlocked for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Admin UnBlocked USer",
+                "operationId": "admin-unblock-user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the user to be Unblocked",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/addcoupon/{couponid}": {
+            "post": {
+                "description": "User Can Add coupon To Cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "User Can Add coupon To Cart",
+                "operationId": "add-coupon-to-cart",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "couponid",
+                        "name": "couponid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/address": {
+            "post": {
+                "description": "User add address field",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User Add Address",
+                "operationId": "user-addaddress",
+                "parameters": [
+                    {
+                        "description": "User add Address",
+                        "name": "user_address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.AddressInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/buy_all": {
+            "post": {
+                "description": "User OrderProduct From Carts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "User BuyAllProduct from cart",
+                "operationId": "user-order-product",
+                "parameters": [
+                    {
+                        "description": "order Details",
+                        "name": "order_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.PlaceOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/cancelorder/{oderid}": {
+            "put": {
+                "description": "Update order for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Update Order for Admin",
+                "operationId": "update-order",
+                "parameters": [
+                    {
+                        "description": "orderid",
+                        "name": "updating_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/cart/{product_id}": {
+            "post": {
+                "description": "User Can add product To Cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "User Add Product To Cart By ProductId",
+                "operationId": "user-add-to-cart-",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product_item_id",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/carts": {
+            "get": {
+                "description": "User Can View Cart and Total Amount",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "User Can View Cart and Total Amount",
+                "operationId": "View-cart",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/home": {
+            "get": {
+                "description": "when login user can see home page",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "HomePage",
+                "operationId": "home",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login/email": {
+            "post": {
+                "description": "User login With Email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "LoginWithEmail",
+                "operationId": "login-with-email",
+                "parameters": [
+                    {
+                        "description": "User login credentials",
+                        "name": "User_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UserLoginEmail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "post": {
+                "description": "Logs out a logged-in user from the E-commerce web api user panel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User Logout",
+                "operationId": "user-logout",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "New User  can Registration.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User SignUp",
+                "operationId": "user-signup",
+                "parameters": [
+                    {
+                        "description": "Register User",
+                        "name": "user_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UsarDataInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/remove/{product_id}": {
+            "delete": {
+                "description": "User Can Remove product To Cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "User Remove Product To Cart By ProductId",
+                "operationId": "user-remove-to-cart-",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product_item_id",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/return": {
+            "post": {
+                "description": "ReturnRequest From  users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "ReturnRequest From  users",
+                "operationId": "retrunreq-user",
+                "parameters": [
+                    {
+                        "description": "Return details",
+                        "name": "return_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.RetrunRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/view": {
+            "get": {
+                "description": "Endpoint for getting all orders associated with a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Retrieves all orders of currently logged in user",
+                "operationId": "view-all-orders",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/viewid/{order_id}": {
+            "get": {
+                "description": "Endpoint for getting  specific orders associated with a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Retrieves  ordersbyID of currently logged in user",
+                "operationId": "view-orderID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "orderid",
+                        "name": "order_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_nadeem1815_premium-watch_pkg_domain.Admin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.AddressInput": {
+            "type": "object",
+            "properties": {
+                "district": {
+                    "type": "string"
+                },
+                "house_name": {
+                    "type": "string"
+                },
+                "landmark": {
+                    "type": "string"
+                },
+                "pincode": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.AdminLogin": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.PlaceOrder": {
+            "type": "object",
+            "properties": {
+                "payment_method_id": {
+                    "type": "integer"
+                },
+                "shipping_address_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.RetrunRequest": {
+            "type": "object",
+            "properties": {
+                "order_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder": {
+            "type": "object",
+            "properties": {
+                "delivery_status_id": {
+                    "type": "integer"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "status_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.UsarDataInput": {
+            "type": "object",
+            "required": [
+                "email_id",
+                "password",
+                "phone"
+            ],
+            "properties": {
+                "email_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 8
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.UserLoginEmail": {
+            "type": "object",
+            "required": [
+                "email_id",
+                "password"
+            ],
+            "properties": {
+                "email_id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 8
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_response.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "errors": {},
+                "message": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
 }

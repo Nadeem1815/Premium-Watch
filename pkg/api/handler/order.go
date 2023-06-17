@@ -21,6 +21,18 @@ func NewOrderHandler(orderusecase services.OrderUseCase) *OrderHandler {
 	}
 }
 
+// BuyAllProduct
+// @Summary User BuyAllProduct from cart
+// @ID user-order-product
+// @Description User OrderProduct From Carts
+// @Tags Order
+// @Accept json
+// @Produce json
+// @param  order_details body model.PlaceOrder true "order Details"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router /user/buy_all  [post]
 func (cr *OrderHandler) BuyAll(c *gin.Context) {
 	var body model.PlaceOrder
 	if err := c.BindJSON(&body); err != nil {
@@ -54,6 +66,18 @@ func (cr *OrderHandler) BuyAll(c *gin.Context) {
 
 }
 
+// Cancelorder
+// @Summary User Cancel Order from order id
+// @ID cancelorder-orderid
+// @Description User Order Cancel form order id
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param orderid path int true "orderid"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router  /user/cancelorder/{oderid} [put]
 func (cr *OrderHandler) UserCancelOrder(c *gin.Context) {
 	paramsId := c.Param("oderid")
 	orderID, err := strconv.Atoi(paramsId)
@@ -89,6 +113,18 @@ func (cr *OrderHandler) UserCancelOrder(c *gin.Context) {
 
 }
 
+// Update order
+// @Summary Update Order for Admin
+// @ID update-order
+// @Description Update order for Admin
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param updating_details body model.UpdateOrder true "orderid"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router  /user/cancelorder/{oderid} [put]
 func (cr *OrderHandler) UpdateOrder(c *gin.Context) {
 
 	var body model.UpdateOrder
@@ -120,6 +156,16 @@ func (cr *OrderHandler) UpdateOrder(c *gin.Context) {
 
 }
 
+// View AllOrder
+// @Summary Retrieves all orders of currently logged in user
+// @ID view-all-orders
+// @Description Endpoint for getting all orders associated with a user
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router   /user/view [get]
 func (cr *OrderHandler) ViewAllOrder(c *gin.Context) {
 	UserID := fmt.Sprintf("%v", c.Value("userID"))
 	viewOrder, err := cr.orderUseCase.ViewAllOrder(c.Request.Context(), UserID)
@@ -140,6 +186,18 @@ func (cr *OrderHandler) ViewAllOrder(c *gin.Context) {
 	})
 }
 
+// ViewOrderById
+// @Summary Retrieves  ordersbyID of currently logged in user
+// @ID view-orderID
+// @Description Endpoint for getting  specific orders associated with a user
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param order_id path int true "orderid"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router   /user/viewid/{order_id} [get]
 func (cr *OrderHandler) ViewOrderID(c *gin.Context) {
 	paramsID := c.Param("order_id")
 	orderID, err := strconv.Atoi(paramsID)
@@ -171,6 +229,18 @@ func (cr *OrderHandler) ViewOrderID(c *gin.Context) {
 	})
 }
 
+// ReturnRequest
+// @Summary ReturnRequest From  users
+// @ID retrunreq-user
+// @Description ReturnRequest From  users
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param return_details body model.RetrunRequest true "Return details"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router   /user/return [post]
 func (cr *OrderHandler) RetrunReq(c *gin.Context) {
 	var orderId model.RetrunRequest
 	if err := c.Bind(&orderId); err != nil {
@@ -184,7 +254,7 @@ func (cr *OrderHandler) RetrunReq(c *gin.Context) {
 		return
 	}
 	userID := fmt.Sprintf("%v", c.Value("userID"))
-	returnRequest, err := cr.orderUseCase.ReturnReq(c.Request.Context(), userID,orderId)
+	returnRequest, err := cr.orderUseCase.ReturnReq(c.Request.Context(), userID, orderId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.Response{
 			StatusCode: http.StatusInternalServerError,

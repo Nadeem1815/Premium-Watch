@@ -20,13 +20,22 @@ type UserHandler struct {
 // 	Surname string `copier:"must"`
 // }
 
-// UserSignUp
 func NewUserHandler(usecase services.UserUseCase) *UserHandler {
 	return &UserHandler{
 		userUseCase: usecase,
 	}
 }
 
+// HomePage
+// @Summary HomePage
+// @ID home
+// @Description when login user can see home page
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router /user/home  [get]
 func (cr *UserHandler) Home(c *gin.Context) {
 	c.JSON(http.StatusCreated, response.Response{
 		StatusCode: 200,
@@ -36,6 +45,18 @@ func (cr *UserHandler) Home(c *gin.Context) {
 	})
 }
 
+// UserSignUp
+// @Summary User SignUp
+// @ID user-signup
+// @Description New User  can Registration.
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user_details body model.UsarDataInput true "Register User"
+// @Success 201 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router /user/register [post]
 func (cr *UserHandler) UserRegister(c *gin.Context) {
 
 	// 1.recive data from request body
@@ -78,7 +99,17 @@ func (cr *UserHandler) UserRegister(c *gin.Context) {
 }
 
 // LoginWithEmail
-
+// @Summary LoginWithEmail
+// @ID login-with-email
+// @Description User login With Email
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param User_details body model.UserLoginEmail true "User login credentials"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router /user/login/email  [post]
 func (cr *UserHandler) LoginWithEmail(c *gin.Context) {
 	// receive data from request body
 	var user model.UserLoginEmail
@@ -116,6 +147,17 @@ func (cr *UserHandler) LoginWithEmail(c *gin.Context) {
 
 }
 
+// UserLogout
+// @Summary User Logout
+// @ID user-logout
+// @Description Logs out a logged-in user from the E-commerce web api user panel
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /user/logout [post]
 func (cr *UserHandler) UserLogut(c *gin.Context) {
 	c.Writer.Header().Set("cache-control", "no-cache,no-store,must-revalidate")
 	c.SetSameSite(http.SameSiteLaxMode)
@@ -124,6 +166,17 @@ func (cr *UserHandler) UserLogut(c *gin.Context) {
 
 }
 
+// AdminBlockedUser
+// @Summary Admin Blocked USer
+// @ID admin-block-user
+// @Description Admin Blocked for user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user_id path string true "ID of the user to be blocked"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /admin/block_user/:user_id  [patch]
 func (cr *UserHandler) BlockedUser(c *gin.Context) {
 	// var blockedUser model.BlockUser
 
@@ -168,6 +221,17 @@ func (cr *UserHandler) BlockedUser(c *gin.Context) {
 
 }
 
+// AdminUnBlockedUser
+// @Summary Admin UnBlocked USer
+// @ID admin-unblock-user
+// @Description Admin UnBlocked for user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user_id path string true "ID of the user to be Unblocked"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /admin/unblock_user/:user_id  [patch]
 func (cr *UserHandler) UnBlockUser(c *gin.Context) {
 	paramsId := c.Param("user_id")
 	// User_Id, err := strconv.Atoi(paramsId)
@@ -199,6 +263,18 @@ func (cr *UserHandler) UnBlockUser(c *gin.Context) {
 	})
 }
 
+// AddAddressUser
+// @Summary User Add Address
+// @ID user-addaddress
+// @Description User add address field
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user_address body model.AddressInput true "User add Address"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router  /user/address  [post]
 func (cr *UserHandler) AddAddress(c *gin.Context) {
 	var body model.AddressInput
 
@@ -232,3 +308,4 @@ func (cr *UserHandler) AddAddress(c *gin.Context) {
 	})
 
 }
+
