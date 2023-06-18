@@ -21,6 +21,19 @@ func NewProductHandler(productUseCase services.ProductUseCase) *ProductHandler {
 	}
 }
 
+// Category management
+// CreateCategory
+// @Summary Create new product category
+// @ID product-category
+// @Description Admin can create new category from admin panel
+// @Tags Product Category
+// @Accept json
+// @Produce json
+// @Param category_name body model.NewCategory true "New category name"
+// @Success 201 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router    /admin/create_categories [post]
 func (cr *ProductHandler) CreateCategory(c *gin.Context) {
 	var category model.NewCategory
 	if err := c.Bind(&category); err != nil {
@@ -35,8 +48,8 @@ func (cr *ProductHandler) CreateCategory(c *gin.Context) {
 
 	newCategory, err := cr.productUseCase.CreateCategory(c.Request.Context(), category.CategoryName)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, response.Response{
-			StatusCode: http.StatusBadRequest,
+		c.JSON(http.StatusInternalServerError, response.Response{
+			StatusCode: http.StatusInternalServerError,
 			Message:    "failed to create new category",
 			Data:       nil,
 			Errors:     err.Error(),
@@ -51,6 +64,16 @@ func (cr *ProductHandler) CreateCategory(c *gin.Context) {
 	})
 }
 
+// ViewAllCategory
+// @Summary View All category
+// @ID viewa-ll-category
+// @Description Admin, users and unregistered users can see all the available categories
+// @Tags Product Category
+// @Accept json
+// @Produce json
+// @Success 201 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router  /admin/all_categories [get]
 func (cr *ProductHandler) ViewAllCategory(c *gin.Context) {
 	categories, err := cr.productUseCase.ViewAllCategory()
 	if err != nil {
@@ -72,6 +95,18 @@ func (cr *ProductHandler) ViewAllCategory(c *gin.Context) {
 
 }
 
+// FindCategoryByID
+// @Summary Find Category by id
+// @ID create-category
+// @Description Admin can create new category from admin panel
+// @Tags Product Category
+// @Accept json
+// @Produce json
+// @Param category_id path int true "find category by id"
+// @Success 201 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router  /admin/find_category_id/{id} [get]
 func (cr *ProductHandler) FindCategoryById(c *gin.Context) {
 	paramID := c.Param("id")
 	categoriesid, err := strconv.Atoi(paramID)

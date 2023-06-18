@@ -24,6 +24,36 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/all_categories": {
+            "get": {
+                "description": "Admin, users and unregistered users can see all the available categories",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product Category"
+                ],
+                "summary": "View All category",
+                "operationId": "viewa-ll-category",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/block_user/:user_id": {
             "patch": {
                 "description": "Admin Blocked for user",
@@ -50,6 +80,53 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/create_categories": {
+            "post": {
+                "description": "Admin can create new category from admin panel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product Category"
+                ],
+                "summary": "Create new product category",
+                "operationId": "product-category",
+                "parameters": [
+                    {
+                        "description": "New category name",
+                        "name": "category_name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.NewCategory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
                         }
@@ -116,6 +193,51 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/find_category_id/{id}": {
+            "get": {
+                "description": "Admin can create new category from admin panel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product Category"
+                ],
+                "summary": "Find Category by id",
+                "operationId": "create-category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "find category by id",
+                        "name": "category_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "schema": {
                             "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
                         }
@@ -723,6 +845,84 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/payments/success": {
+            "get": {
+                "description": "Handler for automatically updating payment details upon successful payment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Handling successful payment",
+                "operationId": "payment-success",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Payment details",
+                        "name": "payment_ref",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Successfully updated payment details",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update payment details",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/razorpay/{order_id}": {
+            "get": {
+                "description": "Users can make payment via Razorpay after placing orders",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Users can make payment",
+                "operationId": "create-razorpay-payment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order id",
+                        "name": "order_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/register": {
             "post": {
                 "description": "New User  can Registration.",
@@ -990,6 +1190,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.NewCategory": {
+            "type": "object",
+            "properties": {
+                "category_name": {
                     "type": "string"
                 }
             }

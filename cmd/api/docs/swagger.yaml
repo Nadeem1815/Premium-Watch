@@ -36,6 +36,11 @@ definitions:
     - email
     - password
     type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.NewCategory:
+    properties:
+      category_name:
+        type: string
+    type: object
   github_com_nadeem1815_premium-watch_pkg_utils_model.PlaceOrder:
     properties:
       payment_method_id:
@@ -111,6 +116,26 @@ info:
   title: Ecommerce REST API
   version: "1.0"
 paths:
+  /admin/all_categories:
+    get:
+      consumes:
+      - application/json
+      description: Admin, users and unregistered users can see all the available categories
+      operationId: viewa-ll-category
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: View All category
+      tags:
+      - Product Category
   /admin/block_user/:user_id:
     patch:
       consumes:
@@ -137,6 +162,37 @@ paths:
       summary: Admin Blocked USer
       tags:
       - User
+  /admin/create_categories:
+    post:
+      consumes:
+      - application/json
+      description: Admin can create new category from admin panel
+      operationId: product-category
+      parameters:
+      - description: New category name
+        in: body
+        name: category_name
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.NewCategory'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Create new product category
+      tags:
+      - Product Category
   /admin/dashboard:
     get:
       consumes:
@@ -182,6 +238,36 @@ paths:
       summary: Sales Report
       tags:
       - Admin
+  /admin/find_category_id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Admin can create new category from admin panel
+      operationId: create-category
+      parameters:
+      - description: find category by id
+        in: path
+        name: category_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Find Category by id
+      tags:
+      - Product Category
   /admin/find_userid/:user_id:
     get:
       consumes:
@@ -576,6 +662,59 @@ paths:
       summary: User Logout
       tags:
       - User
+  /user/payments/success:
+    get:
+      consumes:
+      - application/json
+      description: Handler for automatically updating payment details upon successful
+        payment
+      operationId: payment-success
+      parameters:
+      - description: Payment details
+        in: query
+        name: payment_ref
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Successfully updated payment details
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Failed to update payment details
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Handling successful payment
+      tags:
+      - Payment
+  /user/razorpay/{order_id}:
+    get:
+      consumes:
+      - application/json
+      description: Users can make payment via Razorpay after placing orders
+      operationId: create-razorpay-payment
+      parameters:
+      - description: Order id
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Users can make payment
+      tags:
+      - Payment
   /user/register:
     post:
       consumes:

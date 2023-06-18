@@ -22,6 +22,18 @@ func NewPaymentHandler(payment services.PaymentUseCase) *PaymentHandler {
 	}
 }
 
+// CreateRazorpayPayment
+// @Summary Users can make payment
+// @ID create-razorpay-payment
+// @Description Users can make payment via Razorpay after placing orders
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Param order_id path string true "Order id"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router  /user/razorpay/{order_id} [get]
 func (cr *PaymentHandler) CreateRazorPayment(c *gin.Context) {
 	paramsId := c.Param("order_id")
 	orderID, err := strconv.Atoi(paramsId)
@@ -62,6 +74,17 @@ func (cr *PaymentHandler) CreateRazorPayment(c *gin.Context) {
 
 }
 
+// PaymentSuccess
+// @Summary Handling successful payment
+// @ID payment-success
+// @Description Handler for automatically updating payment details upon successful payment
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Param payment_ref query string true "Payment details"
+// @Success 202 {object} response.Response "Successfully updated payment details"
+// @Failure 500 {object} response.Response "Failed to update payment details"
+// @Router  /user/payments/success [get]
 func (cr *PaymentHandler) PaymentSuccess(c *gin.Context) {
 	paymentRef := c.Query("payment_ref")
 	idstr := c.Query("order_id")
