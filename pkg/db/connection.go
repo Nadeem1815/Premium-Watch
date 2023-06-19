@@ -52,6 +52,9 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 
 		// coupon table
 		&domain.Coupon{},
+
+		// wallet table
+		&domain.Wallet{},
 	)
 
 	return db, dbErr

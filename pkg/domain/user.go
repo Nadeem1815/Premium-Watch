@@ -34,3 +34,10 @@ type UserInfo struct {
 	// Admin            Admin  `gorm:"foreignkey:BlockedBy"`
 	// ResonforBlocking string `json:"reson_for_blocking"`
 }
+
+type Wallet struct {
+	ID            uint    `json:"id" gorm:"primaryKey;not null"`
+	UserID        string  `json:"user_id" gorm:"not null"`
+	Users         Users   `gorm:"foreignKey:UserID"`
+	WalletBalance float64 `json:"total_amount" gorm:"not null"`
+}

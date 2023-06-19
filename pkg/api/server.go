@@ -72,6 +72,9 @@ func NewServerHTTP(userHandler *handler.UserHandler,
 	userapi.GET("/razorpay/:order_id", paymentHandler.CreateRazorPayment)
 	userapi.GET("/payments/success", paymentHandler.PaymentSuccess)
 
+	// wallets routes
+	userapi.GET("/wallet", orderHandler.UserWallet)
+
 	//
 	// admins routes
 	admin := engine.Group("admin")

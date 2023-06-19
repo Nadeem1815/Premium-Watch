@@ -73,7 +73,7 @@ func (cr *productDataBase) ListAllProducts() ([]model.OutPutProduct, error) {
 	if err != nil {
 		return []model.OutPutProduct{}, err
 	}
-	return allProduct, err
+	return allProduct, nil
 }
 
 func (cr *productDataBase) UpdateProduct(ctx context.Context, updateProduct domain.Product) (domain.Product, error) {

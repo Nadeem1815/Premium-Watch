@@ -14,4 +14,5 @@ type OrderUseCase interface {
 	ViewAllOrder(ctx context.Context, UserID string) ([]domain.Order, error)
 	ViewOrderID(ctx context.Context, userID string, orderID int) (domain.Order, error)
 	ReturnReq(ctx context.Context, userID string, orderId model.RetrunRequest) (domain.Order, error)
+	UserWallet(ctx context.Context, userID string) (domain.Wallet, error)
 }
