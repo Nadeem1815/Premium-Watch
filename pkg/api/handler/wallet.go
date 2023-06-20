@@ -8,6 +8,18 @@ import (
 	"github.com/nadeem1815/premium-watch/pkg/utils/response"
 )
 
+// UserWallet
+// @Summary User Wallet
+// @ID user-wallet
+// @Description user  
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param admin_credentials body model.AdminLogin true "Admin login credentials"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router /admin/login/email  [post]
 func (cr *OrderHandler) UserWallet(c *gin.Context) {
 	userID := fmt.Sprintf("%v", c.Value("userID"))
 

@@ -11,6 +11,39 @@ definitions:
       user_name:
         type: string
     type: object
+  github_com_nadeem1815_premium-watch_pkg_domain.Product:
+    properties:
+      brand:
+        type: string
+      colour:
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      product_category_id:
+        type: integer
+      product_image:
+        type: string
+      sku:
+        type: string
+      stock:
+        type: number
+      updatedAt:
+        type: string
+    required:
+    - brand
+    - name
+    - price
+    - sku
+    - stock
+    type: object
   github_com_nadeem1815_premium-watch_pkg_utils_model.AddressInput:
     properties:
       district:
@@ -36,6 +69,19 @@ definitions:
     - email
     - password
     type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.CreatCoupon:
+    properties:
+      code:
+        type: string
+      discount_max_amount:
+        type: number
+      discount_percent:
+        type: number
+      min_order_value:
+        type: number
+      valid_till:
+        type: string
+    type: object
   github_com_nadeem1815_premium-watch_pkg_utils_model.NewCategory:
     properties:
       category_name:
@@ -52,6 +98,19 @@ definitions:
     properties:
       order_id:
         type: integer
+    type: object
+  github_com_nadeem1815_premium-watch_pkg_utils_model.UpdatCoupon:
+    properties:
+      discount_max_amount:
+        type: number
+      discount_percent:
+        type: number
+      id:
+        type: integer
+      min_order_value:
+        type: number
+      valid_till:
+        type: string
     type: object
   github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder:
     properties:
@@ -121,7 +180,7 @@ paths:
       consumes:
       - application/json
       description: Admin, users and unregistered users can see all the available categories
-      operationId: viewa-ll-category
+      operationId: view-all-category
       produces:
       - application/json
       responses:
@@ -136,6 +195,26 @@ paths:
       summary: View All category
       tags:
       - Product Category
+  /admin/all_product:
+    get:
+      consumes:
+      - application/json
+      description: Admin, users and unregistered users can see all the available products
+      operationId: list-all-products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: List All Products
+      tags:
+      - Products
   /admin/block_user/:user_id:
     patch:
       consumes:
@@ -162,6 +241,37 @@ paths:
       summary: Admin Blocked USer
       tags:
       - User
+  /admin/creatcoupon:
+    post:
+      consumes:
+      - application/json
+      description: Admin can create new coupon
+      operationId: create-coupon
+      parameters:
+      - description: New Coupon
+        in: body
+        name: createcoupon_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.CreatCoupon'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Create new Coupon
+      tags:
+      - Coupon
   /admin/create_categories:
     post:
       consumes:
@@ -193,6 +303,37 @@ paths:
       summary: Create new product category
       tags:
       - Product Category
+  /admin/create_product:
+    post:
+      consumes:
+      - application/json
+      description: Admin can create new products listing
+      operationId: create-product
+      parameters:
+      - description: New product name
+        in: body
+        name: createproduct_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_domain.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Create new product
+      tags:
+      - Products
   /admin/dashboard:
     get:
       consumes:
@@ -214,6 +355,66 @@ paths:
       summary: DashBoard
       tags:
       - Admin
+  /admin/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint allows an admin user to delete a product by ID.
+      operationId: Delete-Coupon
+      parameters:
+      - description: coupon_id
+        in: path
+        name: coupon_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Admin Remove Coupon
+      tags:
+      - Coupon
+  /admin/delete_product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint allows an admin user to delete a product by ID.
+      operationId: Delete-product
+      parameters:
+      - description: product_id
+        in: path
+        name: product_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Admin Remove Product To Cart
+      tags:
+      - Products
   /admin/download:
     get:
       consumes:
@@ -242,8 +443,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Admin can create new category from admin panel
-      operationId: create-category
+      description: Admin, users and unregistered users can see all the available categories
+      operationId: find-category-id
       parameters:
       - description: find category by id
         in: path
@@ -420,6 +621,88 @@ paths:
       summary: Admin UnBlocked USer
       tags:
       - User
+  /admin/update_product:
+    patch:
+      consumes:
+      - application/json
+      description: Admin Update products details
+      operationId: update-product
+      parameters:
+      - description: 'update product '
+        in: body
+        name: updateproduct_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_domain.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Update product
+      tags:
+      - Products
+  /admin/updatecoupon:
+    patch:
+      consumes:
+      - application/json
+      description: Admin Update Coupon details
+      operationId: update-coupon
+      parameters:
+      - description: 'update product '
+        in: body
+        name: updatecoupon_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdatCoupon'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Update Coupon
+      tags:
+      - Coupon
+  /admin/view:
+    get:
+      consumes:
+      - application/json
+      description: Admin, users and unregistered users can see all the available Coupon
+      operationId: view-all-coupon
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: List All Coupon
+      tags:
+      - Coupon
   /user/addcoupon/{couponid}:
     post:
       consumes:
@@ -593,6 +876,36 @@ paths:
       summary: User Can View Cart and Total Amount
       tags:
       - Cart
+  /user/coupon/{couponid}:
+    get:
+      consumes:
+      - application/json
+      description: Admin, users and registered users can see all the available coupon
+      operationId: view-couponby-id
+      parameters:
+      - description: find coupon by id
+        in: path
+        name: viewcoupon_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: View Coupon by id
+      tags:
+      - Coupon
   /user/home:
     get:
       consumes:

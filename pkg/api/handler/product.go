@@ -66,7 +66,7 @@ func (cr *ProductHandler) CreateCategory(c *gin.Context) {
 
 // ViewAllCategory
 // @Summary View All category
-// @ID viewa-ll-category
+// @ID view-all-category
 // @Description Admin, users and unregistered users can see all the available categories
 // @Tags Product Category
 // @Accept json
@@ -97,8 +97,8 @@ func (cr *ProductHandler) ViewAllCategory(c *gin.Context) {
 
 // FindCategoryByID
 // @Summary Find Category by id
-// @ID create-category
-// @Description Admin can create new category from admin panel
+// @ID find-category-id
+// @Description Admin, users and unregistered users can see all the available categories
 // @Tags Product Category
 // @Accept json
 // @Produce json
@@ -138,6 +138,18 @@ func (cr *ProductHandler) FindCategoryById(c *gin.Context) {
 
 }
 
+// Create Product
+// @Summary Create new product
+// @ID create-product
+// @Description Admin can create new products listing
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Param createproduct_details body domain.Product true "New product name"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router    /admin/create_product [post]
 func (cr *ProductHandler) CreateProduct(c *gin.Context) {
 	var createProduct domain.Product
 	if err := c.Bind(&createProduct); err != nil {
@@ -168,6 +180,18 @@ func (cr *ProductHandler) CreateProduct(c *gin.Context) {
 
 }
 
+// Update Product
+// @Summary Update product
+// @ID update-product
+// @Description Admin Update products details
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Param updateproduct_details body domain.Product true "update product "
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router  /admin/update_product [patch]
 func (cr *ProductHandler) UpdatateProduct(c *gin.Context) {
 	var updataproduct domain.Product
 	if err := c.Bind(&updataproduct); err != nil {
@@ -199,6 +223,16 @@ func (cr *ProductHandler) UpdatateProduct(c *gin.Context) {
 
 }
 
+// ListAllProducts
+// @Summary List All Products
+// @ID list-all-products
+// @Description Admin, users and unregistered users can see all the available products
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router  /admin/all_product [get]
 func (cr *ProductHandler) ListAllProducts(c *gin.Context) {
 	listAllProducts, err := cr.productUseCase.ListAllProducts()
 	if err != nil {
@@ -219,6 +253,18 @@ func (cr *ProductHandler) ListAllProducts(c *gin.Context) {
 	})
 }
 
+// DeleteProduct
+// @Summary Admin Remove Product To Cart
+// @ID Delete-product
+// @Description This endpoint allows an admin user to delete a product by ID.
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Param product_id path int true "product_id"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 422 {object} response.Response
+// @Router /admin/delete_product/{id}  [delete]
 func (cr *ProductHandler) DeleteProduct(c *gin.Context) {
 	paramsID := c.Param("id")
 	id, err := strconv.Atoi(paramsID)
@@ -250,6 +296,18 @@ func (cr *ProductHandler) DeleteProduct(c *gin.Context) {
 	})
 }
 
+// Create Coupon
+// @Summary Create new Coupon
+// @ID create-coupon
+// @Description Admin can create new coupon
+// @Tags Coupon
+// @Accept json
+// @Produce json
+// @Param createcoupon_details body model.CreatCoupon true "New Coupon"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router  /admin/creatcoupon [post]
 func (cr *ProductHandler) CreateCoupon(c *gin.Context) {
 	var couponCreate model.CreatCoupon
 
@@ -282,6 +340,18 @@ func (cr *ProductHandler) CreateCoupon(c *gin.Context) {
 	})
 }
 
+// Update Coupon
+// @Summary Update Coupon
+// @ID update-coupon
+// @Description Admin Update Coupon details
+// @Tags Coupon
+// @Accept json
+// @Produce json
+// @Param updatecoupon_details body model.UpdatCoupon true "update product "
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router  /admin/updatecoupon [patch]
 func (cr *ProductHandler) UpdateCoupon(c *gin.Context) {
 	var updateCoupon model.UpdatCoupon
 	if err := c.BindJSON(&updateCoupon); err != nil {
@@ -313,6 +383,18 @@ func (cr *ProductHandler) UpdateCoupon(c *gin.Context) {
 	})
 }
 
+// DeleteCoupon
+// @Summary Admin Remove Coupon
+// @ID Delete-Coupon
+// @Description This endpoint allows an admin user to delete a product by ID.
+// @Tags Coupon
+// @Accept json
+// @Produce json
+// @Param coupon_id path int true "coupon_id"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router /admin/delete/{id}  [delete]
 func (cr *ProductHandler) DeleteCoupon(c *gin.Context) {
 	parms := c.Param("id")
 	couponID, err := strconv.Atoi(parms)
@@ -346,6 +428,16 @@ func (cr *ProductHandler) DeleteCoupon(c *gin.Context) {
 
 }
 
+// ViewAllCoupon
+// @Summary List All Coupon
+// @ID view-all-coupon
+// @Description Admin, users and unregistered users can see all the available Coupon
+// @Tags Coupon
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router  /admin/view [get]
 func (cr *ProductHandler) ViewAllCoupon(c *gin.Context) {
 	ViewAllCoupon, err := cr.productUseCase.ViewAllCoupon()
 	if err != nil {
@@ -367,6 +459,18 @@ func (cr *ProductHandler) ViewAllCoupon(c *gin.Context) {
 
 }
 
+// ViewCouponByID
+// @Summary View Coupon by id
+// @ID view-couponby-id
+// @Description Admin, users and registered users can see all the available coupon
+// @Tags Coupon
+// @Accept json
+// @Produce json
+// @Param viewcoupon_id path int true "find coupon by id"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router  /user/coupon/{couponid} [get]
 func (cr *ProductHandler) ViewCouponById(c *gin.Context) {
 	paramID := c.Param("couponid")
 	couponID, err := strconv.Atoi(paramID)

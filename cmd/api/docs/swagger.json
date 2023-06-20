@@ -30,10 +30,40 @@
                     "Product Category"
                 ],
                 "summary": "View All category",
-                "operationId": "viewa-ll-category",
+                "operationId": "view-all-category",
                 "responses": {
                     "201": {
                         "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/all_product": {
+            "get": {
+                "description": "Admin, users and unregistered users can see all the available products",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "List All Products",
+                "operationId": "list-all-products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
                         }
@@ -73,6 +103,53 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/creatcoupon": {
+            "post": {
+                "description": "Admin can create new coupon",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon"
+                ],
+                "summary": "Create new Coupon",
+                "operationId": "create-coupon",
+                "parameters": [
+                    {
+                        "description": "New Coupon",
+                        "name": "createcoupon_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.CreatCoupon"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
                         }
@@ -133,6 +210,53 @@
                 }
             }
         },
+        "/admin/create_product": {
+            "post": {
+                "description": "Admin can create new products listing",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Create new product",
+                "operationId": "create-product",
+                "parameters": [
+                    {
+                        "description": "New product name",
+                        "name": "createproduct_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_domain.Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/dashboard": {
             "get": {
                 "description": "Admin Can access dashboard and view details of recoding orders,products etc",
@@ -150,6 +274,96 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/delete/{id}": {
+            "delete": {
+                "description": "This endpoint allows an admin user to delete a product by ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon"
+                ],
+                "summary": "Admin Remove Coupon",
+                "operationId": "Delete-Coupon",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "coupon_id",
+                        "name": "coupon_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/delete_product/{id}": {
+            "delete": {
+                "description": "This endpoint allows an admin user to delete a product by ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Admin Remove Product To Cart",
+                "operationId": "Delete-product",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "product_id",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "schema": {
                             "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
                         }
@@ -201,7 +415,7 @@
         },
         "/admin/find_category_id/{id}": {
             "get": {
-                "description": "Admin can create new category from admin panel",
+                "description": "Admin, users and unregistered users can see all the available categories",
                 "consumes": [
                     "application/json"
                 ],
@@ -212,7 +426,7 @@
                     "Product Category"
                 ],
                 "summary": "Find Category by id",
-                "operationId": "create-category",
+                "operationId": "find-category-id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -457,6 +671,130 @@
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/update_product": {
+            "patch": {
+                "description": "Admin Update products details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Update product",
+                "operationId": "update-product",
+                "parameters": [
+                    {
+                        "description": "update product ",
+                        "name": "updateproduct_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_domain.Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/updatecoupon": {
+            "patch": {
+                "description": "Admin Update Coupon details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon"
+                ],
+                "summary": "Update Coupon",
+                "operationId": "update-coupon",
+                "parameters": [
+                    {
+                        "description": "update product ",
+                        "name": "updatecoupon_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdatCoupon"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/view": {
+            "get": {
+                "description": "Admin, users and unregistered users can see all the available Coupon",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon"
+                ],
+                "summary": "List All Coupon",
+                "operationId": "view-all-coupon",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -721,6 +1059,51 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/coupon/{couponid}": {
+            "get": {
+                "description": "Admin, users and registered users can see all the available coupon",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon"
+                ],
+                "summary": "View Coupon by id",
+                "operationId": "view-couponby-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "find coupon by id",
+                        "name": "viewcoupon_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
                         }
@@ -1149,6 +1532,54 @@
                 }
             }
         },
+        "github_com_nadeem1815_premium-watch_pkg_domain.Product": {
+            "type": "object",
+            "required": [
+                "brand",
+                "name",
+                "price",
+                "sku",
+                "stock"
+            ],
+            "properties": {
+                "brand": {
+                    "type": "string"
+                },
+                "colour": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "product_category_id": {
+                    "type": "integer"
+                },
+                "product_image": {
+                    "type": "string"
+                },
+                "sku": {
+                    "type": "string"
+                },
+                "stock": {
+                    "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_nadeem1815_premium-watch_pkg_utils_model.AddressInput": {
             "type": "object",
             "properties": {
@@ -1187,6 +1618,26 @@
                 }
             }
         },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.CreatCoupon": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "discount_max_amount": {
+                    "type": "number"
+                },
+                "discount_percent": {
+                    "type": "number"
+                },
+                "min_order_value": {
+                    "type": "number"
+                },
+                "valid_till": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_nadeem1815_premium-watch_pkg_utils_model.NewCategory": {
             "type": "object",
             "properties": {
@@ -1211,6 +1662,26 @@
             "properties": {
                 "order_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "github_com_nadeem1815_premium-watch_pkg_utils_model.UpdatCoupon": {
+            "type": "object",
+            "properties": {
+                "discount_max_amount": {
+                    "type": "number"
+                },
+                "discount_percent": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "min_order_value": {
+                    "type": "number"
+                },
+                "valid_till": {
+                    "type": "string"
                 }
             }
         },
