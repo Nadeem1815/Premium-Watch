@@ -18,10 +18,11 @@ import (
 // @contact.email nadeemf408@gmail.com
 
 // @license.name MIT
-// @host localhost:3000
+// @host permium-watch.shop
 // @license.url https://opensource.org/licenses/MIT
 
 // @BasePath /
+// @schemes https
 // @query.collection.format multi
 
 func main() {

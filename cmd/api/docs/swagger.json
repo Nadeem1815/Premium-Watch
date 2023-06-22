@@ -1,4 +1,7 @@
 {
+    "schemes": [
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "Ecommerce REST API built using Go Lang, PSQL, REST API following Clean Architecture. Hosted with Ngnix, AWS EC2 and RDS",
@@ -14,7 +17,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:3000",
+    "host": "permium-watch.shop",
     "basePath": "/",
     "paths": {
         "/admin/all_categories": {
@@ -529,7 +532,7 @@
         },
         "/admin/login/email": {
             "post": {
-                "description": "Admin login",
+                "description": "user",
                 "consumes": [
                     "application/json"
                 ],
@@ -537,10 +540,10 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "User"
                 ],
-                "summary": "Admin Login",
-                "operationId": "admin-login",
+                "summary": "User Wallet",
+                "operationId": "user-wallet",
                 "parameters": [
                     {
                         "description": "Admin login credentials",

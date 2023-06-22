@@ -5,13 +5,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/nadeem1815/premium-watch/pkg/utils/model"
 	"github.com/nadeem1815/premium-watch/pkg/utils/response"
 )
 
 // UserWallet
 // @Summary User Wallet
 // @ID user-wallet
-// @Description user  
+// @Description user
 // @Tags User
 // @Accept json
 // @Produce json

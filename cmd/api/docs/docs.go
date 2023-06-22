@@ -536,7 +536,7 @@ const docTemplate = `{
         },
         "/admin/login/email": {
             "post": {
-                "description": "Admin login",
+                "description": "user",
                 "consumes": [
                     "application/json"
                 ],
@@ -544,10 +544,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "User"
                 ],
-                "summary": "Admin Login",
-                "operationId": "admin-login",
+                "summary": "User Wallet",
+                "operationId": "user-wallet",
                 "parameters": [
                     {
                         "description": "Admin login credentials",
@@ -1769,9 +1769,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3000",
+	Host:             "permium-watch.shop",
 	BasePath:         "/",
-	Schemes:          []string{},
+	Schemes:          []string{"https"},
 	Title:            "Ecommerce REST API",
 	Description:      "Ecommerce REST API built using Go Lang, PSQL, REST API following Clean Architecture. Hosted with Ngnix, AWS EC2 and RDS",
 	InfoInstanceName: "swagger",

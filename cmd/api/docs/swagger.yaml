@@ -161,7 +161,7 @@ definitions:
       status_code:
         type: integer
     type: object
-host: localhost:3000
+host: permium-watch.shop
 info:
   contact:
     email: nadeemf408@gmail.com
@@ -519,8 +519,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: Admin login
-      operationId: admin-login
+      description: user
+      operationId: user-wallet
       parameters:
       - description: Admin login credentials
         in: body
@@ -543,9 +543,9 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
-      summary: Admin Login
+      summary: User Wallet
       tags:
-      - Admin
+      - User
   /admin/logout:
     post:
       consumes:
@@ -1170,4 +1170,6 @@ paths:
       summary: Retrieves  ordersbyID of currently logged in user
       tags:
       - Order
+schemes:
+- https
 swagger: "2.0"
