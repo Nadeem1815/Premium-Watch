@@ -683,6 +683,37 @@ paths:
       summary: Update Coupon
       tags:
       - Coupon
+  /admin/updateorder:
+    put:
+      consumes:
+      - application/json
+      description: Update order for Admin
+      operationId: update-order
+      parameters:
+      - description: orderupdat
+        in: body
+        name: updating_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Update Order for Admin
+      tags:
+      - Order
   /admin/view:
     get:
       consumes:
@@ -1117,37 +1148,6 @@ paths:
           schema:
             $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
       summary: ReturnRequest From  users
-      tags:
-      - Order
-  /user/updateorder:
-    put:
-      consumes:
-      - application/json
-      description: Update order for Admin
-      operationId: update-order
-      parameters:
-      - description: orderupdat
-        in: body
-        name: updating_details
-        required: true
-        schema:
-          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
-      summary: Update Order for Admin
       tags:
       - Order
   /user/view:

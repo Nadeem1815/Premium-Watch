@@ -788,6 +788,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/updateorder": {
+            "put": {
+                "description": "Update order for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Update Order for Admin",
+                "operationId": "update-order",
+                "parameters": [
+                    {
+                        "description": "orderupdat",
+                        "name": "updating_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/view": {
             "get": {
                 "description": "Admin, users and unregistered users can see all the available Coupon",
@@ -1418,53 +1465,6 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.RetrunRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/updateorder": {
-            "put": {
-                "description": "Update order for Admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Order"
-                ],
-                "summary": "Update Order for Admin",
-                "operationId": "update-order",
-                "parameters": [
-                    {
-                        "description": "orderupdat",
-                        "name": "updating_details",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder"
                         }
                     }
                 ],

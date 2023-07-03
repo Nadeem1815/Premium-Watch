@@ -124,7 +124,7 @@ func (cr *OrderHandler) UserCancelOrder(c *gin.Context) {
 // @Success 200 {object} response.Response
 // @Failure 500 {object} response.Response
 // @Failure 400 {object} response.Response
-// @Router  /user/updateorder [put]
+// @Router  /admin/updateorder [put]
 func (cr *OrderHandler) UpdateOrder(c *gin.Context) {
 
 	var body model.UpdateOrder
