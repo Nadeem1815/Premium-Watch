@@ -1119,14 +1119,14 @@ paths:
       summary: ReturnRequest From  users
       tags:
       - Order
-  /user/updateorder/{oderid}:
+  /user/updateorder:
     put:
       consumes:
       - application/json
       description: Update order for Admin
       operationId: update-order
       parameters:
-      - description: orderid
+      - description: orderupdat
         in: body
         name: updating_details
         required: true

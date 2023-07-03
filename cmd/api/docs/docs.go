@@ -1443,7 +1443,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/updateorder/{oderid}": {
+        "/user/updateorder": {
             "put": {
                 "description": "Update order for Admin",
                 "consumes": [
@@ -1459,7 +1459,7 @@ const docTemplate = `{
                 "operationId": "update-order",
                 "parameters": [
                     {
-                        "description": "orderid",
+                        "description": "orderupdat",
                         "name": "updating_details",
                         "in": "body",
                         "required": true,

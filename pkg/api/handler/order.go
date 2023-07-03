@@ -120,7 +120,7 @@ func (cr *OrderHandler) UserCancelOrder(c *gin.Context) {
 // @Tags Order
 // @Accept json
 // @Produce json
-// @Param updating_details body model.UpdateOrder true "orderid"
+// @Param updating_details body model.UpdateOrder true "orderupdat"
 // @Success 200 {object} response.Response
 // @Failure 500 {object} response.Response
 // @Failure 400 {object} response.Response
