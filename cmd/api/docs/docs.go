@@ -959,7 +959,7 @@ const docTemplate = `{
         },
         "/user/cancelorder/{oderid}": {
             "put": {
-                "description": "Update order for Admin",
+                "description": "User Order Cancel form order id",
                 "consumes": [
                     "application/json"
                 ],
@@ -969,17 +969,15 @@ const docTemplate = `{
                 "tags": [
                     "Order"
                 ],
-                "summary": "Update Order for Admin",
-                "operationId": "update-order",
+                "summary": "User Cancel Order from order id",
+                "operationId": "cancelorder-orderid",
                 "parameters": [
                     {
+                        "type": "integer",
                         "description": "orderid",
-                        "name": "updating_details",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder"
-                        }
+                        "name": "orderid",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1420,6 +1418,53 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.RetrunRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/updateorder/{oderid}": {
+            "put": {
+                "description": "Update order for Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Update Order for Admin",
+                "operationId": "update-order",
+                "parameters": [
+                    {
+                        "description": "orderid",
+                        "name": "updating_details",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder"
                         }
                     }
                 ],

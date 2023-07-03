@@ -799,15 +799,14 @@ paths:
     put:
       consumes:
       - application/json
-      description: Update order for Admin
-      operationId: update-order
+      description: User Order Cancel form order id
+      operationId: cancelorder-orderid
       parameters:
       - description: orderid
-        in: body
-        name: updating_details
+        in: path
+        name: orderid
         required: true
-        schema:
-          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder'
+        type: integer
       produces:
       - application/json
       responses:
@@ -823,7 +822,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
-      summary: Update Order for Admin
+      summary: User Cancel Order from order id
       tags:
       - Order
   /user/cart/{product_id}:
@@ -1118,6 +1117,37 @@ paths:
           schema:
             $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
       summary: ReturnRequest From  users
+      tags:
+      - Order
+  /user/updateorder/{oderid}:
+    put:
+      consumes:
+      - application/json
+      description: Update order for Admin
+      operationId: update-order
+      parameters:
+      - description: orderid
+        in: body
+        name: updating_details
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_model.UpdateOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_nadeem1815_premium-watch_pkg_utils_response.Response'
+      summary: Update Order for Admin
       tags:
       - Order
   /user/view:
