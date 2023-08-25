@@ -21,55 +21,72 @@ func TestUserRegister(t *testing.T) {
 		buildStub      func(mock sqlmock.Sqlmock)
 		expectedErr    error
 	}{
-		{
-			//test case for creating a new user
+		{ //test case for creating a new user
 			name: "successful create user",
 			input: model.UsarDataInput{
-				Name:     "Nadeem",
-				Surname:  "F",
-				EmailId:  "nadeem@gmail.com",
-				Password: "nadeem@123",
-				Phone:    "8129487958",
+				Name:     "Muhammed",
+				Surname:  "S",
+				EmailId:  "Muhammed@gmail.com",
+				Phone:    "7902638845",
+				Password: "muhammed@123",
 			},
 			expectedOutput: model.UserDataOutput{
-				ID:      "1",
-				Name:    "Nadeem",
-				Surname: "F",
-				EmailId: "nadeem@gmail.com",
-				Phone:   "8129487958",
+				ID:      6,
+				Name:    "Muhammed",
+				Surname: "S",
+				EmailId: "Muhammed@gmail.com",
+				Phone:   "7902638845",
 			},
 			buildStub: func(mock sqlmock.Sqlmock) {
 				rows := sqlmock.NewRows([]string{"id", "name", "surname", "email_id", "password", "phone"}).
-					AddRow("1", "Nadeem", "F", "nadeem@gmail.com", "nadeem@123", "8129487958")
+					AddRow(6, "Muhammed", "S", "Muhammed@gmail.com", "muhammed@123", "7902638845")
 
-				mock.ExpectQuery("^INSERT INTO users (.+)$").
-					WithArgs("Nadeem", "F", "nadeem@gmail.com", "nadeem@123", "8129487958").
+				// mock.ExpectQuery("^INSERT INTO users (.+)$").
+				// 	WithArgs("Nadeem", "F", "nadeem@gmail.com", "nadeem@123", "8129487958").
+				// 	WillReturnRows(rows)
+				mock.ExpectQuery(`^INSERT INTO users\(name,surname,email_id,password,phone,created_at\) VALUES\(.+\) RETURNING id,name,surname,email_id,phone$`).
+					WithArgs("Muhammed", "S", "Muhammed@gmail.com", "muhammed@123", "7902638845").
 					WillReturnRows(rows)
 
-				// mock.ExpectExec("^INSERT INTO user_infos (.+)$").
-				// 	WithArgs(2).
-				// 	WillReturnResult(sqlmock.NewResult(0, 1))
+				mock.ExpectExec("^INSERT INTO user_infos (.+)$").
+					WithArgs(6).
+					WillReturnResult(sqlmock.NewResult(0, 1))
 			},
 			expectedErr: nil,
 		},
-		{
-			// test case for trying to insert a user duplicate id's
-			name: "duplicate user",
+		{ //test case for trying to insert a user with duplicate phone id
+			name: "duplicate email",
 			input: model.UsarDataInput{
-				Name:     "Nadeem",
-				Surname:  "F",
-				EmailId:  "nadeem@gmail.com",
-				Password: "nadeem@123",
-				Phone:    "8129487958",
+				Name:     "Muhammed",
+				Surname:  "S",
+				EmailId:  "Muhammed@gmail.com",
+				Phone:    "7902638845",
+				Password: "muhammed@123",
 			},
 			expectedOutput: model.UserDataOutput{},
 			buildStub: func(mock sqlmock.Sqlmock) {
-				mock.ExpectQuery("^INSERT INTO users(.+)$").
-					WithArgs("Nadeem", "F", "nadeem@gmail.com", "nadeem@123", "8129487958").
-					WillReturnError(errors.New("email or phone is already used"))
-
+				mock.ExpectQuery(`^INSERT INTO users\(name,surname,email_id,password,phone,created_at\) VALUES\(.+\) RETURNING id,name,surname,email_id,phone$`).
+					WithArgs("Muhammed", "S", "Muhammed@gmail.com", "muhammed@123", "7902638845").
+					WillReturnError(errors.New("duplicate key value violates unique constraint 'phone'"))
 			},
-			expectedErr: errors.New("email or phone is already used"),
+			expectedErr: errors.New("duplicate key value violates unique constraint 'phone'"),
+		},
+		{ //test case for trying to insert a user with duplicate email_id
+			name: "duplicate email",
+			input: model.UsarDataInput{
+				Name:     "Muhammed",
+				Surname:  "S",
+				EmailId:  "Muhammed@gmail.com",
+				Phone:    "7902638845",
+				Password: "muhammed@123",
+			},
+			expectedOutput: model.UserDataOutput{},
+			buildStub: func(mock sqlmock.Sqlmock) {
+				mock.ExpectQuery(`^INSERT INTO users\(name,surname,email_id,password,phone,created_at\) VALUES\(.+\) RETURNING id,name,surname,email_id,phone$`).
+					WithArgs("Muhammed", "S", "Muhammed@gmail.com", "muhammed@123", "7902638845").
+					WillReturnError(errors.New("duplicate key value violates unique constraint 'email'"))
+			},
+			expectedErr: errors.New("duplicate key value violates unique constraint 'email'"),
 		},
 	}
 
@@ -116,3 +133,81 @@ func TestUserRegister(t *testing.T) {
 		})
 	}
 }
+
+// func TestUserRegister(t *testing.T) {
+// 	tests := []struct {
+// 		name           string
+// 		input          model.UsarDataInput
+// 		expectedOutput model.UserDataOutput
+// 		buildStub      func(mock sqlmock.Sqlmock)
+// 		expectedErr    error
+// 	}{
+// 		// ... existing test case ...
+
+// 		{ // test case for database error during user insertion
+// 			name: "database error during user insertion",
+// 			input: model.UsarDataInput{
+// 				Name:     "Muhammed",
+// 				Surname:  "S",
+// 				EmailId:  "muhammed@example.com",
+// 				Phone:    "1234567890",
+// 				Password: "muhammed123",
+// 			},
+// 			expectedOutput: model.UserDataOutput{},
+// 			buildStub: func(mock sqlmock.Sqlmock) {
+// 				rows := sqlmock.NewRows([]string{"id", "name", "surname", "email_id", "phone", "password"}).
+// 					AddRow(3, "Muhammed", "S", "muhammed@gmail.com", "7902638845", "muhammed@123")
+// 				mock.ExpectQuery("^INSERT INTO users (.+)$").
+// 					WillReturnRows(rows)
+
+// 				// No expectations for the second query (user_infos)
+// 			},
+// 			expectedErr: fmt.Errorf("database error"),
+// 		},
+
+// 		// Add more test cases here for different scenarios...
+
+// 	}
+
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			// ... existing test setup ...
+// 			db, mock, err := sqlmock.New()
+// 			if err != nil {
+// 				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+// 			}
+// 			//close the mock db connection after testing.
+// 			defer db.Close()
+
+// 			//initialize a mock db session
+// 			gormDB, err := gorm.Open(postgres.New(postgres.Config{Conn: db}), &gorm.Config{})
+// 			if err != nil {
+// 				t.Fatalf("an error '%s' was not expected when initializing a mock db session", err)
+// 			}
+
+// 			//create NewUserRepository mock by passing a pointer to gorm.DB
+// 			userRepository := NewUserRepository(gormDB)
+
+// 			// before we actually execute our function, we need to expect required DB actions
+// 			tt.buildStub(mock)
+
+// 			actualOutput, actualErr := userRepository.UserRegister(context.TODO(), tt.input)
+
+// 			if tt.expectedErr == nil {
+// 				assert.NoError(t, actualErr)
+// 			} else {
+// 				assert.Equal(t, tt.expectedErr, actualErr)
+// 			}
+
+// 			if !reflect.DeepEqual(tt.expectedOutput, actualOutput) {
+// 				t.Errorf("got %v, but want %v", actualOutput, tt.expectedOutput)
+// 			}
+
+// 			// ... existing expectation check ...
+// 			err = mock.ExpectationsWereMet()
+// 			if err != nil {
+// 				t.Errorf("Unfulfilled expectations: %s", err)
+// 			}
+// 		})
+// 	}
+// }

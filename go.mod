@@ -3,8 +3,10 @@ module github.com/nadeem1815/premium-watch
 go 1.19
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-playground/validator/v10 v10.12.0
+	github.com/golang/mock v1.4.4
 	github.com/google/wire v0.5.0
 	github.com/razorpay/razorpay-go v0.0.0-20230410044935-943abe07d4c1
 	github.com/spf13/viper v1.15.0
@@ -17,7 +19,6 @@ require (
 )
 
 require (
-	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect

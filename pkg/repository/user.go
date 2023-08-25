@@ -5,7 +5,6 @@ import (
 
 	"github.com/nadeem1815/premium-watch/pkg/domain"
 	interfaces "github.com/nadeem1815/premium-watch/pkg/repository/interface"
-	"github.com/nadeem1815/premium-watch/pkg/utils/idgenerator"
 	"github.com/nadeem1815/premium-watch/pkg/utils/model"
 	"gorm.io/gorm"
 )
@@ -23,14 +22,21 @@ func NewUserRepository(DB *gorm.DB) interfaces.UserRepository {
 func (c *userDatabase) UserRegister(ctx context.Context, user model.UsarDataInput) (model.UserDataOutput, error) {
 	var userData model.UserDataOutput
 	// query for creating a new entry in users table
-	users := domain.Users{
-		ID: idgenerator.GenerateID(),
-	}
-	createUserQuery := `INSERT INTO users(id,name,surname,email_id,password,phone,created_at)
-				  VALUES($1,$2,$3,$4,$5,$6,NOW())
+	// users := domain.Users{
+	// 	ID: idgenerator.GenerateID(),
+	// }
+
+	// 	insertQuery := `INSERT INTO users (name,email,mobile,password)VALUES($1,$2,$3,$4)
+	// 	RETURNING id,name,email,mobile`
+	// err = c.DB.Raw(insertQuery, user.Name, user.Email, user.Mobile, user.Password).Scan(&userValue).Error
+
+	// return userValue, err
+
+	createUserQuery := `INSERT INTO users(name,surname,email_id,password,phone,created_at)
+				  VALUES($1,$2,$3,$4,$5,NOW())
 				  RETURNING id,name,surname,email_id,phone`
 
-	err := c.DB.Raw(createUserQuery, users.ID, user.Name, user.Surname, user.EmailId, user.Password, user.Phone).Scan(&userData).Error
+	err := c.DB.Raw(createUserQuery, user.Name, user.Surname, user.EmailId, user.Password, user.Phone).Scan(&userData).Error
 
 	if err == nil {
 		//query for creating a new entry in the user_infos table.

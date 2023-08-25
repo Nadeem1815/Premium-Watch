@@ -42,5 +42,9 @@ swag:
 
 swag: ## Generate swagger docs # cd cmd/api && swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs
 
+mockgen: # Generate mock files for the test
+		mockgen -source=pkg/repository/interface/user.go -destination=pkg/repository/mockrepo/user_mock.go -package=mockrepo
+		mockgen -source=pkg/usecase/interface/user.go -destination=pkg/usecase/mockusecase/user_mock.go -package=mockusecase
+	  	
 help: ## Display this help screen
-	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'`whimak
