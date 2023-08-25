@@ -3,7 +3,7 @@ package domain
 import "time"
 
 type Users struct {
-	ID        string `json:"id" gorm:"primaryKey;unique;not null"`
+	ID        uint   `json:"id" gorm:"primaryKey;unique;not null"`
 	Name      string `json:"name"`
 	Surname   string `json:"surname"`
 	EmailId   string `json:"email_id" gorm:"uniqueIndex" binding:"required" validate:"required,email"`
@@ -25,10 +25,10 @@ type Address struct {
 }
 
 type UserInfo struct {
-	ID        uint   `gorm:"primaryKey"`
-	UsersID   string `json:"users_id"`
-	Users     Users  `gorm:"foreignKey:UsersID"`
-	IsBlocked bool   `json:"is_blocked"`
+	ID        uint  `gorm:"primaryKey"`
+	UsersID   uint  `json:"users_id"`
+	Users     Users `gorm:"foreignKey:UsersID"`
+	IsBlocked bool  `json:"is_blocked"`
 	BlockedAt time.Time
 	// BlockedBy        uint
 	// Admin            Admin  `gorm:"foreignkey:BlockedBy"`
@@ -37,7 +37,7 @@ type UserInfo struct {
 
 type Wallet struct {
 	ID            uint    `json:"id" gorm:"primaryKey;not null"`
-	UserID        string  `json:"user_id" gorm:"not null"`
+	UserID        uint    `json:"user_id" gorm:"not null"`
 	Users         Users   `gorm:"foreignKey:UserID"`
 	WalletBalance float64 `json:"total_amount" gorm:"not null"`
 }

@@ -9,7 +9,7 @@ type UsarDataInput struct {
 }
 
 type UserDataOutput struct {
-	ID      string `json:"user_id"`
+	ID      uint   `json:"user_id"`
 	Name    string `json:"name"`
 	Surname string `json:"surname"`
 	EmailId string `json:"email_id"`
@@ -22,7 +22,7 @@ type UserLoginEmail struct {
 }
 
 type UserLoginVarifier struct {
-	ID        string `json:"user_id"`
+	ID        uint   `json:"user_id"`
 	Name      string `json:"name"`
 	Surname   string `json:"surname"`
 	EmailId   string `json:"email_id"`
