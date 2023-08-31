@@ -54,16 +54,7 @@ func (c *userDatabase) UserRegister(ctx context.Context, user model.UsarDataInpu
 
 func (c *userDatabase) FindByEmail(ctx context.Context, email string) (model.UserLoginVarifier, error) {
 	var userData model.UserLoginVarifier
-	findUserQuery := `	SELECT 
-							u.id,u.name,u.surname,u.email_id,u.password,u.phone,info.is_blocked
-						FROM 
-							users as u
-						FULL OUTER JOIN 
-							user_infos as info
-						ON 
-							u.id=info.users_id
-						WHERE 
-							u.email_id=$1;`
+	findUserQuery := `SELECT u.id,u.name,u.surname,u.email_id,u.password,u.phone,info.is_blocked FROM users as u FULL OUTER JOIN user_infos as info ON u.id=info.users_id WHERE u.email_id=$1;`
 	err := c.DB.Raw(findUserQuery, email).Scan(&userData).Error
 	return userData, err
 
