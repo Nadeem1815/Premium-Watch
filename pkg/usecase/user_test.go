@@ -217,3 +217,91 @@ func TestUserRegister(t *testing.T) {
 	}
 
 }
+
+func TestLoginWithEmail(t *testing.T) {
+	//NewController from gomock package returns a new controller for testing
+	ctrl := gomock.NewController(t)
+
+	// NewMockUserRepository creates a new mockRepo instance
+	userRepo := mockrepo.NewMockUserRepository(ctrl)
+
+	// NewMockUserRepository creates a new mockRepo instance
+	// orderRepo := mockrepo.MockUserRepository(ctrl)
+
+	userUseCase := NewUserUseCase(userRepo)
+
+	// testData is a slice of struct which holds multiple test cases
+	testData := []struct {
+		name           string
+		input          model.UserLoginEmail
+		buildStub      func(userRepo mockrepo.MockUserRepository)
+		expectedOutput model.UserDataOutput
+		expectedError  error
+	}{
+		{
+			name: "correct email and password",
+			input: model.UserLoginEmail{
+				EmailId:  "nadeemf@gmail.com",
+				Password: "Nadeem@123",
+			},
+			buildStub: func(userRepo mockrepo.MockUserRepository) {
+				hashedPassword, err := bcrypt.GenerateFromPassword([]byte("Nadeem@123"), 10)
+				if err != nil {
+					t.Fatalf("failed to generate hash from password in build stub %v", err)
+				}
+				userRepo.EXPECT().
+					FindByEmail(
+						gomock.Any(),
+						"nadeemf@gmail.com").
+					Times(1).
+					Return(model.UserLoginVarifier{
+						ID:        1,
+						Name:      "Nadeem",
+						Surname:   "Fahad",
+						EmailId:   "Nadeemf@gmail.com",
+						Phone:     "7902631234",
+						Password:  string(hashedPassword),
+						IsBlocked: false,
+					}, nil)
+			},
+			expectedOutput: model.UserDataOutput{
+				ID:      1,
+				Name:    "Nadeem",
+				Surname: "Fahad",
+				EmailId: "Nadeemf@gmail.com",
+				Phone:   "7902631234",
+			},
+			expectedError: nil,
+		},
+		{
+			name: "incorrect email or password",
+			input: model.UserLoginEmail{
+				EmailId:  "randomEmail@gmail.com",
+				Password: "randomPassword",
+			},
+			buildStub: func(userRepo mockrepo.MockUserRepository) {
+				userRepo.EXPECT().
+					FindByEmail(
+						gomock.Any(),
+						"randomEmail@gmail.com").
+					Times(1).
+					Return(
+						model.UserLoginVarifier{},
+						errors.New("error finding userData"),
+					)
+			},
+			expectedOutput: model.UserDataOutput{},
+			expectedError:  errors.New("error finding userData"),
+		},
+	}
+
+	// looping through the test cases and running them individually
+	for _, tt := range testData {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.buildStub(*userRepo)
+			_, actualData, actualErr := userUseCase.LoginWithEmail(context.TODO(), tt.input)
+			assert.Equal(t, actualData, tt.expectedOutput)
+			assert.Equal(t, tt.expectedError, actualErr)
+		})
+	}
+}
