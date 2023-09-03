@@ -34,7 +34,7 @@ func TestUserRegister(t *testing.T) {
 				ID:      6,
 				Name:    "Muhammed",
 				Surname: "S",
-				EmailId: "Muhammed@fffgmail.com",
+				EmailId: "Muhammed@gmail.com",
 				Phone:   "7902638845",
 			},
 			buildStub: func(mock sqlmock.Sqlmock) {
