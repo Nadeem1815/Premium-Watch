@@ -4,9 +4,8 @@ import (
 	"log"
 
 	_ "github.com/nadeem1815/premium-watch/cmd/api/docs"
-
-	config "github.com/nadeem1815/premium-watch/pkg/config"
-	di "github.com/nadeem1815/premium-watch/pkg/di"
+	"github.com/nadeem1815/premium-watch/pkg/config"
+	"github.com/nadeem1815/premium-watch/pkg/di"
 )
 
 // @title Ecommerce REST API
