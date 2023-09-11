@@ -1,7 +1,4 @@
 {
-    "schemes": [
-        "https"
-    ],
     "swagger": "2.0",
     "info": {
         "description": "Ecommerce REST API built using Go Lang, PSQL, REST API following Clean Architecture. Hosted with Ngnix, AWS EC2 and RDS",
@@ -17,7 +14,7 @@
         },
         "version": "1.0"
     },
-    "host": "permium-watch.shop",
+    "host": "localhost:3000",
     "basePath": "/",
     "paths": {
         "/admin/all_categories": {
