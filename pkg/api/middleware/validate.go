@@ -8,7 +8,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func ValidateToken(cookie string) (string, error) {
+func ValidateToken(cookie string) (int, error) {
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 	// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 	// head of the token to identify which key to use, but the parsed token (head and claims) is provided
@@ -23,24 +23,25 @@ func ValidateToken(cookie string) (string, error) {
 		return []byte("secret"), nil
 	})
 	if err != nil {
-		return "", err
+		return 0, err
 	}
-	// if token == nil || !token.valid {
+	// if token == nil || !token.Valid {
 	// 	return 0, fmt.Errorf("invalid token")
 	// }
 	var parsedID interface{}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		parsedID = claims["id"]
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
-			return "", fmt.Errorf("token expired")
+			return 0, fmt.Errorf("token expired")
 		}
 	}
 	// Type Assertion
-	value, ok := parsedID.(string)
+	value, ok := parsedID.(float64)
 	if !ok {
-		return "", fmt.Errorf("expected an int value ,but got %T", parsedID)
+		return 0, fmt.Errorf("expected an int value ,but got %T", parsedID)
 
 	}
+	id := int(value)
 
-	return value, nil
+	return id, err
 }

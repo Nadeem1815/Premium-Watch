@@ -161,7 +161,7 @@ definitions:
       status_code:
         type: integer
     type: object
-host: permium-watch.shop
+host: localhost:3000
 info:
   contact:
     email: nadeemf408@gmail.com
@@ -1200,6 +1200,4 @@ paths:
       summary: Retrieves  ordersbyID of currently logged in user
       tags:
       - Order
-schemes:
-- https
 swagger: "2.0"
