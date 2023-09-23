@@ -37,6 +37,14 @@ deps-cleancache: ## Clear cache in Go module
 wire: ## Generate wire_gen.go
 	cd pkg/di && wire
 
+
+swagger: ## install swagger and its dependencies for generate swagger using swag
+	$(GOCMD) install github.com/swaggo/swag/cmd/swag@latest 
+	$(GOCMD) get -u github.com/swaggo/swag/cmd/swag 
+	$(GOCMD) get -u github.com/swaggo/gin-swagger 
+	$(GOCMD) get -u github.com/swaggo/files
+		
+
 swag:
 	swag init -g cmd/api/main.go --parseDependency -o ./cmd/api/docs
 
