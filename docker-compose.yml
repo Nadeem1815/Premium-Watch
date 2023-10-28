@@ -64,7 +64,7 @@ services:
       - database:/var/lib/postgresql/data
 
   web:
-    image: web
+    image: nadeem1815/prem
     ports:
       - "3000:3000"
     environment:
