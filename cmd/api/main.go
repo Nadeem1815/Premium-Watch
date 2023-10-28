@@ -22,9 +22,8 @@ import (
 // @license.url https://opensource.org/licenses/MIT
 
 // @BasePath /
-////@schemes https
+// //@schemes https
 // @query.collection.format multi
-
 func main() {
 	config, configErr := config.LoadConfig()
 	if configErr != nil {
